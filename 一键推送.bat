@@ -1,181 +1,140 @@
 @echo off
-chcp 65001 >nul
+rem Ò»¼üÍÆËÍ£º¹¹½¨ - Ìá½» - ÍÆËÍ¡£Ê×´ÎÔËĞĞ»áÒıµ¼µÇÂ¼ GitHub¡£
 setlocal enabledelayedexpansion
-rem ============================================================================
-rem  ä¸€é”®æ¨é€åˆ° GitHubï¼ˆæ–°æ‰‹å‘ï¼Œå…¨ä¸­æ–‡å¼•å¯¼ï¼‰
-rem
-rem  é¦–æ¬¡è¿è¡Œä¼šå¼•å¯¼ä½ è´´ä¸€æ¬¡ Personal Access Tokenï¼›
-rem  ä¹‹åæ¯æ¬¡åŒå‡»æœ¬è„šæœ¬éƒ½ä¼šè‡ªåŠ¨ï¼šæ„å»º â†’ æäº¤ â†’ æ¨é€ã€‚
-rem ============================================================================
-
 set "REPO=%~dp0"
 set "TOOLS=%REPO%..\DSH-tools"
 set "PATH=%TOOLS%\PortableGit\cmd;%TOOLS%\node-v24.21.0-win-x64;%TOOLS%\gh;%PATH%"
-
 cd /d "%REPO%"
-
 echo ============================================
-echo   æ¨é€ä¸–ç•Œè§‚ Wiki åˆ° GitHub
+echo   ÍÆËÍÊÀ½ç¹Û Wiki µ½ GitHub
 echo ============================================
 echo.
-
-rem ---------- 0. å·¥å…·è‡ªæ£€ ----------
 where gh >nul 2>nul
-if errorlevel 1 (
-  echo [!] æ‰¾ä¸åˆ° gh å‘½ä»¤ã€‚
-  echo     è¯·ç¡®è®¤ DSH-tools æ–‡ä»¶å¤¹ä¸ DSH-wiki åœ¨åŒä¸€ä¸ªç›®å½•ä¸‹ã€‚
-  echo     æœŸæœ›ä½ç½®ï¼š%TOOLS%
-  echo.
-  pause
-  exit /b 1
-)
+if errorlevel 1 goto no_tools
 where git >nul 2>nul
-if errorlevel 1 (
-  echo [!] æ‰¾ä¸åˆ° git å‘½ä»¤ã€‚åŒä¸Šï¼Œè¯·ç¡®è®¤ DSH-tools æ–‡ä»¶å¤¹ä½ç½®ã€‚
-  echo.
-  pause
-  exit /b 1
-)
-
-rem ---------- 1. ç™»å½•çŠ¶æ€ ----------
-echo [1/4] æ£€æŸ¥ GitHub ç™»å½•çŠ¶æ€...
+if errorlevel 1 goto no_tools
+goto check_login
+:no_tools
+echo [!] ÕÒ²»µ½ gh »ò git ÃüÁî¡£
+echo     ÇëÈ·ÈÏ DSH-tools ÎÄ¼ş¼ĞÓë DSH-wiki ÔÚÍ¬Ò»¸ö¸¸Ä¿Â¼ÏÂ¡£
+echo     ÆÚÍû¹¤¾ßÄ¿Â¼: %TOOLS%
+echo.
+goto end
+:check_login
+echo [1/4] ¼ì²é GitHub µÇÂ¼×´Ì¬...
 gh auth status >nul 2>nul
 if not errorlevel 1 goto logged_in
-
 echo.
-echo       ä½ è¿˜æ²¡æœ‰ç™»å½• GitHubï¼Œç°åœ¨å¼•å¯¼ä½ å®Œæˆï¼ˆåªéœ€ä¸€æ¬¡ï¼‰ã€‚
+echo       Äã»¹Ã»ÓĞµÇÂ¼ GitHub£¬ÏÖÔÚÒıµ¼ÄãÍê³É£¬Ö»Ğè×öÒ»´Î¡£
 echo.
-echo   ----------------------------------------------
-echo   ç¬¬ä¸€æ­¥ï¼šåœ¨æµè§ˆå™¨æ‰“å¼€ä¸‹é¢è¿™ä¸ªç½‘å€
+echo   -------------------- ²Ù×÷²½Öè --------------------
+echo   1. ä¯ÀÀÆ÷´ò¿ª:  https://github.com/settings/tokens/new
+echo   2. °´ÏÂ±íÌîĞ´:
+echo        Note ±¸×¢      : dsh-wiki   £¨Ëæ±ãĞ´£©
+echo        Expiration     : Ñ¡ 90 days »ò No expiration
+echo        Select scopes  : ¹´Ñ¡×îÉÏÃæÄÇ¸ö [ ] repo
+echo   3. Ò³ÃæÀ­µ½µ×£¬µãÂÌÉ«°´Å¥ Generate token
+echo   4. ¸´ÖÆÉú³ÉµÄ token£¬ĞÎÈç ghp_xxxxxxxx
+echo   --------------------------------------------------
 echo.
-echo       https://github.com/settings/tokens/new
+echo   ×¢Òâ: token Ö»ÏÔÊ¾Ò»´Î£¬ÇëÏÈ¸´ÖÆºÃ¡£
 echo.
-echo   ç¬¬äºŒæ­¥ï¼šæŒ‰ä¸‹è¡¨å¡«å†™
-echo       Noteï¼ˆå¤‡æ³¨ï¼‰  ï¼šéšä¾¿å†™ï¼Œä¾‹å¦‚ dsh-wiki
-echo       Expiration    ï¼šé€‰ 90 days æˆ– No expiration éƒ½è¡Œ
-echo       Select scopes ï¼šå‹¾é€‰æœ€ä¸Šé¢é‚£ä¸ª  [x] repo
-echo   ç¬¬ä¸‰æ­¥ï¼šé¡µé¢æ‹‰åˆ°åº•ï¼Œç‚¹ç»¿è‰²çš„  Generate token
-echo   ç¬¬å››æ­¥ï¼šå¤åˆ¶ç”Ÿæˆçš„ tokenï¼ˆå½¢å¦‚ ghp_xxxxxxxxï¼‰
-echo   ----------------------------------------------
-echo.
-echo   æ³¨æ„ï¼štoken åªæ˜¾ç¤ºä¸€æ¬¡ï¼Œè¯·å…ˆå¤åˆ¶å¥½ã€‚
-echo.
-echo   å‡†å¤‡å¥½åï¼Œåœ¨ä¸‹é¢æŒ‰é¼ æ ‡å³é”®ç²˜è´´ï¼ˆæˆ– Ctrl+Vï¼‰ï¼Œç„¶åå›è½¦ï¼š
+echo   ÏÖÔÚÔÚÏÂÃæ°´Êó±êÓÒ¼üÕ³Ìù£¬È»ºó»Ø³µ:
 echo.
 set "GHTOKEN="
-set /p "GHTOKEN= ç²˜è´´ token åå›è½¦: "
-
-if "!GHTOKEN!"=="" (
-  echo.
-  echo [!] æ²¡æœ‰è¾“å…¥å†…å®¹ï¼Œå·²é€€å‡ºã€‚é‡æ–°åŒå‡»æœ¬è„šæœ¬å³å¯é‡æ¥ã€‚
-  echo.
-  pause
-  exit /b 1
-)
-
+set /p "GHTOKEN=  Õ³Ìù token: "
+if "!GHTOKEN!"=="" goto no_token
 echo.
-echo       æ­£åœ¨éªŒè¯ token...
+echo       ÕıÔÚÑéÖ¤ token ...
 echo !GHTOKEN!| gh auth login --hostname github.com --with-token
-if errorlevel 1 (
-  echo.
-  echo [!] ç™»å½•å¤±è´¥ã€‚å¸¸è§åŸå› ï¼š
-  echo     - token å¤åˆ¶ä¸å…¨æˆ–å¤šäº†ç©ºæ ¼
-  echo     - token æ²¡æœ‰å‹¾é€‰ repo æƒé™
-  echo     - token å·²ç»è¿‡æœŸ
-  echo     è¯·é‡æ–°ç”Ÿæˆä¸€ä¸ª token å†è¯•ã€‚
-  echo.
-  pause
-  exit /b 1
-)
-echo       ç™»å½•æˆåŠŸ âœ“
+if errorlevel 1 goto token_fail
+echo       µÇÂ¼³É¹¦
 set "GHTOKEN="
-
-:logged_in
-echo       å·²ç™»å½• âœ“
+goto logged_in
+:no_token
 echo.
-
-rem ---------- 2. è¿œç¨‹ä»“åº“ ----------
-echo [2/4] æ£€æŸ¥è¿œç¨‹ä»“åº“...
+echo [!] Ã»ÓĞÊäÈëÄÚÈİ£¬ÒÑÍË³ö¡£ÖØĞÂË«»÷±¾½Å±¾¼´¿ÉÖØÀ´¡£
+echo.
+goto end
+:token_fail
+echo.
+echo [!] µÇÂ¼Ê§°Ü¡£³£¼ûÔ­Òò:
+echo     - token ¸´ÖÆ²»È«£¬»òÇ°ºó¶àÁË¿Õ¸ñ
+echo     - Éú³ÉÊ±Ã»ÓĞ¹´Ñ¡ repo È¨ÏŞ
+echo     - token ÒÑ¹ıÆÚ
+echo     ÇëÖØĞÂÉú³ÉÒ»¸öÔÙÊÔ¡£
+echo.
+goto end
+:logged_in
+echo       ÒÑµÇÂ¼
+echo.
+echo [2/4] ¼ì²éÔ¶³Ì²Ö¿â...
 git remote get-url origin >nul 2>nul
 if not errorlevel 1 goto have_remote
-
-echo       è¿˜æ²¡æœ‰è¿œç¨‹ä»“åº“ï¼Œæ­£åœ¨åˆ›å»º DSH-wikiï¼ˆç§æœ‰ï¼‰...
+echo       »¹Ã»ÓĞÔ¶³Ì²Ö¿â£¬ÕıÔÚ´´½¨ DSH-wiki£¬ÉèÎªË½ÓĞ...
 gh repo create DSH-wiki --private --source=. --remote=origin
-if errorlevel 1 (
-  echo.
-  echo [!] åˆ›å»ºä»“åº“å¤±è´¥ã€‚å¯èƒ½åŸå› ï¼š
-  echo     - åŒåä»“åº“å·²å­˜åœ¨ï¼ˆè‹¥æ˜¯ä½ è‡ªå·±çš„ï¼Œå¯ç”¨ä¸‹é¢çš„å‘½ä»¤æ‰‹åŠ¨å…³è”ï¼‰ï¼š
-  echo         git remote add origin https://github.com/ä½ çš„ç”¨æˆ·å/DSH-wiki.git
-  echo     - ç½‘ç»œä¸é€šï¼Œæˆ– token æƒé™ä¸è¶³
-  echo.
-  pause
-  exit /b 1
-)
-echo       ä»“åº“å·²åˆ›å»ºå¹¶å…³è” âœ“
-
+if errorlevel 1 goto repo_fail
+echo       ²Ö¿âÒÑ´´½¨²¢¹ØÁª
+goto have_remote
+:repo_fail
+echo.
+echo [!] ´´½¨²Ö¿âÊ§°Ü£¬¿ÉÄÜÔ­Òò:
+echo     - ÄãÕËºÅÏÂÒÑÓĞÍ¬Ãû DSH-wiki ²Ö¿â
+echo     - ÍøÂç²»Í¨£¬»ò token È¨ÏŞ²»×ã
+echo.
+goto end
 :have_remote
 git remote -v
 echo.
-
-rem ---------- 3. æ„å»º ----------
-echo [3/4] æœ¬åœ°é‡å»ºéªŒè¯...
+echo [3/4] ±¾µØÖØ½¨ÑéÖ¤...
 node build.mjs
-if errorlevel 1 (
-  echo.
-  echo [!] æ„å»ºå¤±è´¥ï¼Œå·²ä¸­æ­¢ï¼Œä¸ä¼šæäº¤ã€‚
-  echo.
-  pause
-  exit /b 1
-)
+if errorlevel 1 goto build_fail
 echo.
-
-rem ---------- 4. æäº¤å¹¶æ¨é€ ----------
-echo [4/4] æäº¤å¹¶æ¨é€...
+echo [4/4] Ìá½»²¢ÍÆËÍ...
 git add -A
-
 git diff --cached --quiet
-if not errorlevel 1 (
-  echo       å†…å®¹æ²¡æœ‰å˜åŒ–ï¼Œè·³è¿‡æäº¤ã€‚
-  goto do_push
-)
-
+if not errorlevel 1 goto do_push
 for /f "tokens=1-4 delims=/-. " %%a in ("%date%") do set "TODAY=%%a-%%b-%%c"
-git commit -m "æ›´æ–°ï¼š%TODAY%" >nul
-if errorlevel 1 (
-  echo.
-  echo [!] æäº¤å¤±è´¥ã€‚è‹¥æç¤ºéœ€è¦ user.name / user.emailï¼Œè¯·æ‰§è¡Œï¼š
-  echo       git config --global user.name  "ä½ çš„åå­—"
-  echo       git config --global user.email "ä½ çš„é‚®ç®±"
-  echo.
-  pause
-  exit /b 1
-)
-echo       å·²æäº¤ âœ“
-
+git commit -m "¸üĞÂ£º!TODAY!" >nul
+if errorlevel 1 goto commit_fail
+echo       ÒÑÌá½»
 :do_push
 git push -u origin main
-if errorlevel 1 (
-  echo.
-  echo [!] æ¨é€å¤±è´¥ã€‚å¸¸è§åŸå› ï¼š
-  echo     - ç½‘ç»œä¸é€šï¼ˆGitHub æœ‰æ—¶éœ€è¦é‡è¯•å‡ æ¬¡ï¼‰
-  echo     - token è¿‡æœŸï¼Œé‡æ–°ç”Ÿæˆåé‡è·‘æœ¬è„šæœ¬
-  echo.
-  pause
-  exit /b 1
-)
-
+if errorlevel 1 goto push_fail
 echo.
 echo ============================================
-echo   å…¨éƒ¨å®Œæˆ âœ“
+echo   È«²¿Íê³É
 echo.
-echo   ä½ çš„ä»“åº“åœ°å€ï¼ˆå¯åœ¨æµè§ˆå™¨æ‰“å¼€ï¼‰ï¼š
-gh repo view --json url -q .url 2>nul
+echo   ÄãµÄ²Ö¿âµØÖ·:
+gh repo view --json url -q .url
 echo.
-echo   æ¥ä¸‹æ¥ï¼šç™»å½• Netlify - Add new site - Import an existing project
-echo   - é€‰ GitHub - é€‰ä¸­ DSH-wiki
-echo     Build command    : node build.mjs
-echo     Publish directory: site
-echo   ä¹‹åæ¯æ¬¡åŒå‡»æœ¬è„šæœ¬ï¼Œçº¿ä¸Šç«™ç‚¹ä¼šè‡ªåŠ¨æ›´æ–°ã€‚
+echo   ÏÂÒ»²½: µÇÂ¼ Netlify£¬Add new site
+echo           Import an existing project£¬Ñ¡ GitHub£¬Ñ¡ DSH-wiki
+echo           Build command    : node build.mjs
+echo           Publish directory: site
+echo.
+echo   ÒÔºóÃ¿´Î¸ÄÍêÄÚÈİ£¬Ë«»÷±¾½Å±¾¼´¿É×Ô¶¯ÉÏÏß¡£
 echo ============================================
+echo.
+goto end
+:build_fail
+echo.
+echo [!] ¹¹½¨Ê§°Ü£¬ÒÑÖĞÖ¹£¬²»»áÌá½»ÈÎºÎ¶«Î÷¡£
+echo.
+goto end
+:commit_fail
+echo.
+echo [!] Ìá½»Ê§°Ü¡£ÈôÌáÊ¾ĞèÒª user.name / user.email£¬ÇëÏÈÖ´ĞĞ:
+echo       git config --global user.name  "ÄãµÄÃû×Ö"
+echo       git config --global user.email "ÄãµÄÓÊÏä"
+echo.
+goto end
+:push_fail
+echo.
+echo [!] ÍÆËÍÊ§°Ü¡£³£¼ûÔ­Òò:
+echo     - ÍøÂç²»Í¨£¬¿ÉÉÔºóÖØÊÔ
+echo     - token ¹ıÆÚ£¬ÖØĞÂÉú³ÉºóÖØÅÜ±¾½Å±¾
+echo.
+:end
 echo.
 pause

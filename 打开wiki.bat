@@ -1,19 +1,13 @@
 @echo off
-chcp 65001 >nul
+rem ¹¹½¨ÊÀ½ç¹Û Wiki ²¢Æô¶¯±¾µØ·şÎñ£¬¶Ë¿Ú¿ÉÓÃ»·¾³±äÁ¿ WIKI_PORT ¸²¸Ç£¬Ä¬ÈÏ 8899
 setlocal
-rem æ„å»ºä¸–ç•Œè§‚ Wiki å¹¶å¯åŠ¨æœ¬åœ°æœåŠ¡
-rem ç«¯å£å¯ç”¨ç¯å¢ƒå˜é‡ WIKI_PORT è¦†ç›–ï¼Œé»˜è®¤ 8899
-
 cd /d "%~dp0"
 if "%WIKI_PORT%"=="" set "WIKI_PORT=8899"
-
-where node >nul 2>nul
-if errorlevel 1 (
-  echo [!] PATH ä¸­æ²¡æœ‰ nodeï¼Œå°è¯•ä½¿ç”¨ DSH è‡ªå¸¦ node...
-  set "NODE_EXE=C:\Users\cyt\AppData\Local\Programs\DSH Desktop\resources\app\node_modules\node\bin\node.exe"
+set "TOOLS=%~dp0..\DSH-tools"
+if exist "%TOOLS%\node-v24.21.0-win-x64\node.exe" (
+  set "NODE_EXE=%TOOLS%\node-v24.21.0-win-x64\node.exe"
 ) else (
   set "NODE_EXE=node"
 )
-
 "%NODE_EXE%" build.mjs --serve %WIKI_PORT%
 pause
