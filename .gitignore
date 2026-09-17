@@ -1,0 +1,11 @@
+﻿# 构建产物：由平台自动生成，不入库
+site/
+
+# Netlify 部署包（本地产物）
+netlify-deploy.zip
+.pack-stage/
+
+# 编辑器 / Office 临时文件
+~$*
+*.tmp
+*.bak
