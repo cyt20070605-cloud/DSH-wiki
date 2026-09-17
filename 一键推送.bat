@@ -1,5 +1,5 @@
 @echo off
-rem 一键推送：构建 - 提交 - 推送。首次运行会引导登录 GitHub。
+rem 一键推送：构建 - 提交 - 推送。已内置代理与凭据处理。
 setlocal enabledelayedexpansion
 set "REPO=%~dp0"
 set "TOOLS=%REPO%..\DSH-tools"
@@ -15,82 +15,52 @@ where git >nul 2>nul
 if errorlevel 1 goto no_tools
 goto check_login
 :no_tools
-echo [!] 找不到 gh 或 git 命令。
-echo     请确认 DSH-tools 文件夹与 DSH-wiki 在同一个父目录下。
+echo [!] 找不到 gh 或 git。请确认 DSH-tools 与 DSH-wiki 在同一个父目录下。
 echo     期望工具目录: %TOOLS%
-echo.
 goto end
 :check_login
-echo [1/4] 检查 GitHub 登录状态...
+echo [1/5] 检查登录状态...
 gh auth status >nul 2>nul
-if not errorlevel 1 goto logged_in
-echo.
-echo       你还没有登录 GitHub，现在引导你完成，只需做一次。
-echo.
-echo   -------------------- 操作步骤 --------------------
-echo   1. 浏览器打开:  https://github.com/settings/tokens/new
-echo   2. 按下表填写:
-echo        Note 备注      : dsh-wiki   （随便写）
-echo        Expiration     : 选 90 days 或 No expiration
-echo        Select scopes  : 勾选最上面那个 [ ] repo
-echo   3. 页面拉到底，点绿色按钮 Generate token
-echo   4. 复制生成的 token，形如 ghp_xxxxxxxx
-echo   --------------------------------------------------
-echo.
-echo   注意: token 只显示一次，请先复制好。
-echo.
-echo   现在在下面按鼠标右键粘贴，然后回车:
-echo.
-set "GHTOKEN="
-set /p "GHTOKEN=  粘贴 token: "
-if "!GHTOKEN!"=="" goto no_token
-echo.
-echo       正在验证 token ...
-echo !GHTOKEN!| gh auth login --hostname github.com --with-token
-if errorlevel 1 goto token_fail
-echo       登录成功
-set "GHTOKEN="
-goto logged_in
-:no_token
-echo.
-echo [!] 没有输入内容，已退出。重新双击本脚本即可重来。
-echo.
-goto end
-:token_fail
-echo.
-echo [!] 登录失败。常见原因:
-echo     - token 复制不全，或前后多了空格
-echo     - 生成时没有勾选 repo 权限
-echo     - token 已过期
-echo     请重新生成一个再试。
-echo.
-goto end
-:logged_in
+if errorlevel 1 goto need_login
 echo       已登录
+goto setup
+:need_login
 echo.
-echo [2/4] 检查远程仓库...
+echo [!] 还没有登录 GitHub。请先双击 仅登录.bat 完成登录，再运行本脚本。
+goto end
+:setup
+echo.
+echo [2/5] 配置代理与凭据...
+rem 读取系统代理设置；若存在则交给 git（git 本身不读系统代理）
+for /f "tokens=2*" %%a in ('reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyServer 2^>nul') do set "SYSPROXY=%%b"
+if defined SYSPROXY (
+  git config http.proxy "http://!SYSPROXY!"
+  git config https.proxy "http://!SYSPROXY!"
+  echo       已设置代理: !SYSPROXY!
+) else (
+  git config --unset http.proxy >nul 2>nul
+  git config --unset https.proxy >nul 2>nul
+  echo       未检测到系统代理，按直连处理
+)
+gh auth setup-git >nul 2>nul
+echo       凭据已接通 gh
+echo.
+echo [3/5] 检查远程仓库...
 git remote get-url origin >nul 2>nul
-if not errorlevel 1 goto have_remote
-echo       还没有远程仓库，正在创建 DSH-wiki，设为私有...
+if errorlevel 1 goto make_repo
+goto have_repo
+:make_repo
+echo       正在创建 DSH-wiki 私有仓库...
 gh repo create DSH-wiki --private --source=. --remote=origin
 if errorlevel 1 goto repo_fail
-echo       仓库已创建并关联
-goto have_remote
-:repo_fail
+:have_repo
+git remote -v | findstr /c:"origin" >nul
 echo.
-echo [!] 创建仓库失败，可能原因:
-echo     - 你账号下已有同名 DSH-wiki 仓库
-echo     - 网络不通，或 token 权限不足
-echo.
-goto end
-:have_remote
-git remote -v
-echo.
-echo [3/4] 本地重建验证...
+echo [4/5] 本地重建验证...
 node build.mjs
 if errorlevel 1 goto build_fail
 echo.
-echo [4/4] 提交并推送...
+echo [5/5] 提交并推送...
 git add -A
 git diff --cached --quiet
 if not errorlevel 1 goto do_push
@@ -103,38 +73,36 @@ git push -u origin main
 if errorlevel 1 goto push_fail
 echo.
 echo ============================================
-echo   全部完成
+echo   完成！线上仓库已更新。
 echo.
-echo   你的仓库地址:
+echo   仓库地址:
 gh repo view --json url -q .url
 echo.
-echo   下一步: 登录 Netlify，Add new site
-echo           Import an existing project，选 GitHub，选 DSH-wiki
-echo           Build command    : node build.mjs
-echo           Publish directory: site
-echo.
-echo   以后每次改完内容，双击本脚本即可自动上线。
+echo   若已在 Netlify 关联本仓库，约一分钟后线上站点自动更新。
 echo ============================================
+goto end
+:repo_fail
 echo.
+echo [!] 创建仓库失败。若已存在同名仓库，可手动关联:
+echo       git remote add origin https://github.com/你的用户名/DSH-wiki.git
 goto end
 :build_fail
 echo.
 echo [!] 构建失败，已中止，不会提交任何东西。
-echo.
 goto end
 :commit_fail
 echo.
-echo [!] 提交失败。若提示需要 user.name / user.email，请先执行:
+echo [!] 提交失败。若提示需要 user.name / user.email，请执行:
 echo       git config --global user.name  "你的名字"
 echo       git config --global user.email "你的邮箱"
-echo.
 goto end
 :push_fail
 echo.
 echo [!] 推送失败。常见原因:
-echo     - 网络不通，可稍后重试
-echo     - token 过期，重新生成后重跑本脚本
-echo.
+echo     - 代理软件没开（若你平时需要代理才能访问 GitHub）
+echo       本脚本会自动读取系统代理设置，请确认代理已启动
+echo     - 网络波动，稍后重试即可
+echo     - token 过期，重新生成后双击 仅登录.bat
 :end
 echo.
 pause
