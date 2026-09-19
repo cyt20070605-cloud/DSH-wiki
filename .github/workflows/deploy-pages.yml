@@ -29,6 +29,9 @@ jobs:
 
       - name: 配置 Pages
         uses: actions/configure-pages@v5
+        with:
+          # 若 Pages 尚未启用则自动开启（公开仓库可用；私有仓库需付费计划）
+          enablement: true
 
       - name: 构建站点
         run: node build.mjs
