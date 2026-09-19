@@ -108,7 +108,7 @@ updated: 2026-09-15
 ## 本站怎么读
 
 - **按世界层级**：从 [四层世界](world.md) 开始，再读 [源质](essence.md) 与 [修正值](correction.md)。
-- **按规则机制**：核心规则——[源质](essence.md)、[律法](law.md)、[术士](sorcerer.md)、[能力体系](power-system.md)（位阶的四个阶段）、[修正值](correction.md)。
+- **按规则机制**：核心规则——[世界往复与纪元](world-cycle.md)（最底层的时间尺度）、[源质](essence.md)、[律法](law.md)、[术士](sorcerer.md)、[能力体系](power-system.md)（位阶的四个阶段）、[修正值](correction.md)。
 - **按势力与存在**：[新神](new-gods.md)、[外神](outer-gods.md)、[旧王](old-kings.md)、[天灾](calamity.md)。
 - **按前文明的遗产**：[遗物](artifact-relic.md)（世界毁灭后的文明残余，含前文明的至高造物「终末之环」）；血脉两支——[人类](race-human.md) 与 [奇幻种](race-fantasy.md)。
 - **按产业与通路**：[辉石经济](essence-economy.md)、[四层通行](passage.md)。
