@@ -17,6 +17,7 @@ echo   第 1 步  浏览器打开：
 echo            https://github.com/settings/tokens/new?scopes=repo,read:org,gist,workflow
 echo.
 echo   第 2 步  按下表填写：
+echo            （四个 scope 都必须勾，缺 workflow 会无法推送 CI 工作流）
 echo            Note 备注     : dsh-wiki
 echo            Expiration    : 选 90 days 或 No expiration
 echo            Select scopes : 勾选这三个
