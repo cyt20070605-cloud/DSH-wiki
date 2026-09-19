@@ -14,7 +14,7 @@ echo.
 echo   重要：请用 classic token，不要用 fine-grained
 echo.
 echo   第 1 步  浏览器打开：
-echo            https://github.com/settings/tokens/new
+echo            https://github.com/settings/tokens/new?scopes=repo,read:org,gist,workflow
 echo.
 echo   第 2 步  按下表填写：
 echo            Note 备注     : dsh-wiki
@@ -23,6 +23,7 @@ echo            Select scopes : 勾选这三个
 echo                            [x] repo
 echo                            [x] read:org
 echo                            [x] gist
+echo                            [x] workflow
 echo.
 echo   第 3 步  页面拉到底，点绿色按钮 Generate token
 echo   第 4 步  复制 token，形如 ghp_xxxxxxxxxx
@@ -85,7 +86,7 @@ echo.
 echo     4^) 该 token 已被删除或已过期
 echo        打开 https://github.com/settings/tokens 检查它是否还在。
 echo.
-echo     建议：直接重新生成一个 classic token，勾 repo / read:org / gist 再试。
+echo     建议：直接重新生成一个 classic token，勾 repo / read:org / gist / workflow 再试。
 goto end
 :gh_failed
 echo [!] API 预检通过了，但 gh 写入凭据失败（退出码 %RC%）。
