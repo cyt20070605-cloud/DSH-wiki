@@ -31,16 +31,26 @@ goto end
 :setup
 echo.
 echo [2/5] 配置代理与凭据...
-rem 读取系统代理设置；若存在则交给 git（git 本身不读系统代理）
+rem 读取系统代理设置；但必须先确认端口真的在监听，否则按直连处理
+rem （代理软件关了而配置还指着它，会导致推送失败）
+set "SYSPROXY="
 for /f "tokens=2*" %%a in ('reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyServer 2^>nul') do set "SYSPROXY=%%b"
 if defined SYSPROXY (
+  set "PPHOST=!SYSPROXY!"
+  set "PPORT=!SYSPROXY!"
+  for /f "tokens=1 delims=:" %%h in ("!SYSPROXY!") do set "PPHOST=%%h"
+  for /f "tokens=2 delims=:" %%p in ("!SYSPROXY!") do set "PPORT=%%p"
+  set "PROXYOK="
+  for /f "usebackq delims=" %%r in (`powershell -NoProfile -Command "try{(New-Object Net.Sockets.TcpClient).Connect('!PPHOST!',[int]'!PPORT!');'OK'}catch{'NO'}"`) do set "PROXYOK=%%r"
+)
+if "!PROXYOK!"=="OK" (
   git config http.proxy "http://!SYSPROXY!"
   git config https.proxy "http://!SYSPROXY!"
-  echo       已设置代理: !SYSPROXY!
+  echo       代理在监听，已交给 git: !SYSPROXY!
 ) else (
   git config --unset http.proxy >nul 2>nul
   git config --unset https.proxy >nul 2>nul
-  echo       未检测到系统代理，按直连处理
+  if defined SYSPROXY (echo       系统代理 !SYSPROXY! 未在监听，按直连处理) else (echo       未检测到系统代理，按直连处理)
 )
 gh auth setup-git >nul 2>nul
 echo       凭据已接通 gh
