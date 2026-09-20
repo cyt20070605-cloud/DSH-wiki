@@ -334,11 +334,11 @@ const NAV_GROUPS = [
   { title: '检索', pages: ['glossary'] },
 ];
 
-// 已并入其它页面的旧网址：内容页删除后仍保留一个跳转壳，
+// 已并入其它页面的旧网址：内容页删除后仍保留一个**静默**跳转，
 // 以免旧链接、书签、浏览器缓存的旧侧边栏点到 404。
 // 键 = 已退休的 slug，值 = 落点（可带 #锚点）。
 const REDIRECTS = {
-  'law-meltdown': { to: 'sorcerer.html#律法熔断', note: '律法熔断', target: '术士' },
+  'law-meltdown': { to: 'sorcerer.html#律法熔断', target: '术士' },
 };
 
 function loadContent() {
@@ -512,7 +512,8 @@ function build() {
     'utf8'
   );
 
-  // 退休网址的跳转壳（见 REDIRECTS）。不进侧边栏、不进检索索引。
+  // 退休网址的静默跳转：页面不可见内容，落地即进目标页。
+  // 不进侧边栏、不进检索索引，也不显示任何中转文字或链接。
   for (const [slug, r] of Object.entries(REDIRECTS)) {
     if (pages.has(slug)) {
       console.warn(`  跳转壳 ${slug}.html 与现有页面同名，已跳过`);
@@ -526,19 +527,12 @@ function build() {
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>${r.note}已并入「${r.target}」 · 世界观 Wiki</title>
+<title>${r.target} · 世界观 Wiki</title>
 <meta name="robots" content="noindex,nofollow">
 <link rel="canonical" href="${href}">
 <meta http-equiv="refresh" content="0; url=${href}">
 </head>
 <body>
-<p style="font-family:system-ui,sans-serif;padding:2rem 2rem 0">
-  「${r.note}」已并入「${r.target}」页，正在跳转……
-</p>
-<p style="font-family:system-ui,sans-serif;padding:0 2rem">
-  <a href="${href}">若没有自动跳转，点这里</a>
-</p>
 <script>location.replace(${JSON.stringify(href)});</script>
 </body>
 </html>
