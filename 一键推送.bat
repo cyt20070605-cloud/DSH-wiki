@@ -88,7 +88,8 @@ echo.
 echo   仓库地址:
 gh repo view --json url -q .url
 echo.
-echo   若已在 Netlify 关联本仓库，约一分钟后线上站点自动更新。
+echo   GitHub Pages 约一分钟后自动更新：
+echo   https://cyt20070605-cloud.github.io/DSH-wiki/
 echo ============================================
 goto end
 :repo_fail
