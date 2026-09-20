@@ -181,5 +181,5 @@ updated: 2026-09-20
 - [新神](new-gods.md) —— 创造界的执掌律法者
 - [旧王](old-kings.md) —— 创造界的古老王者（实力比肩次位外神）
 - [外神](outer-gods.md) —— 原型界的存在
-- [炼金武装](alchemy-arms.md) —— 仅适合非凡者使用的武器
+- [炼金武装](alchemy-arms.md) —— 仅适合术士使用的武器（门槛是身体机能与精神）
 - [天灾 · 恶魔](calamity.md) —— 非凡者可炼制 DEVIL TRIGGER 作为恶魔容器，融合后成为魔人
