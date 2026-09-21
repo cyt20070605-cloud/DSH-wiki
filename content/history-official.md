@@ -96,5 +96,5 @@ updated: 2026-09-15
 - [时间线](timeline.md) —— 完整的原始历史叙述
 - [千禧陆沉](timeline.md) —— 第三次冲击
 - [旧王](old-kings.md) —— 无邦者的归属
-- [四层通行](passage.md) —— 通路的类型与代价
+- [四层通行](world.md#四层通行) —— 通路的类型与代价
 - [遗物](artifact-relic.md) —— 终末之环与前文明的遗产

@@ -325,7 +325,7 @@ function renderMarkdown(md, file, autolink = true) {
 
 const NAV_GROUPS = [
   { title: '总览', pages: ['index'] },
-  { title: '世界构成', pages: ['world', 'passage'] },
+  { title: '世界构成', pages: ['world'] },
   { title: '核心规则', pages: ['world-cycle', 'essence', 'law', 'sorcerer', 'power-system', 'correction'] },
   { title: '非凡物品', pages: ['artifact-relic', 'alchemy', 'alchemy-arms', 'essence-economy'] },
   { title: '非凡种族', pages: ['race-human', 'race-fantasy', 'race-dragonkin'] },
@@ -339,6 +339,7 @@ const NAV_GROUPS = [
 // 键 = 已退休的 slug，值 = 落点（可带 #锚点）。
 const REDIRECTS = {
   'law-meltdown': { to: 'sorcerer.html#律法熔断', target: '术士' },
+  'passage': { to: 'world.html#四层通行', target: '四层世界' },
 };
 
 function loadContent() {
@@ -392,7 +393,7 @@ function buildLinkMap(pages) {
     环阶: 'power-system.html', 源质抗性: 'sorcerer.html',
     四界: 'power-system.html', 物质界: 'power-system.html', 形成界: 'power-system.html',
     创造界: 'power-system.html', 原型界: 'power-system.html',
-    通行方式: 'passage.html', 官方叙事: 'history-official.html', 辉石经济: 'essence-economy.html',
+    通行方式: 'world.html#四层通行', 官方叙事: 'history-official.html', 辉石经济: 'essence-economy.html',
     凝结: 'essence-economy.html', 耐受上限: 'sorcerer.html',
     新合众国: 'federation.html', 新神: 'new-gods.html',
   };
