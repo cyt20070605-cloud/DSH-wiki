@@ -48,7 +48,7 @@ updated: 2026-09-15
 - 体系两阶段：
   - **原始非凡体系**（[混沌时代](timeline.md)）——通过教会向神明献上信仰与忠诚，换取通往非凡的资格。
   - **现代非凡体系**（[复兴时代](timeline.md)）——以 [炼金学](alchemy.md) 为核心，术士与国家势力深度绑定。
-- 装备与工具：[遗物](artifact-relic.md)（旧域与边境内发现的神秘物品）、[炼金武装](alchemy-arms.md)（遗物的替代品）。
+- 装备与工具：[遗物](artifact-relic.md)（旧域与边境内发现的神秘物品）、[炼金武装](alchemy.md#炼金武装)（遗物的替代品）。
 
 ## 存在等级
 
@@ -113,5 +113,5 @@ updated: 2026-09-15
 - **按规则机制**：核心规则——[纪元](world-cycle.md)（最底层的时间尺度）、[源质](essence.md)、[律法](law.md)、[术士](sorcerer.md)、[能力体系](power-system.md)（位阶的四个阶段）、[修正值](correction.md)。
 - **按势力与存在**：[新神](new-gods.md)、[外神](outer-gods.md)、[旧王](old-kings.md)、[天灾](calamity.md)。
 - **按前文明的遗产**：[遗物](artifact-relic.md)（世界毁灭后的文明残余，含前文明的至高造物「终末之环」）；血脉两支——[人类](race-human.md) 与 [奇幻种](race-fantasy.md)。
-- **按产业与通路**：[辉石经济](essence-economy.md)、[四层通行](world.md#四层通行)。
+- **按产业与通路**：[辉石](essence-economy.md)、[四层通行](world.md#四层通行)。
 - **按名词查证**：[术语索引](glossary.md) 提供正名/别名对照。
