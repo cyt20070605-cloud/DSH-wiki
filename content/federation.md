@@ -1,6 +1,6 @@
 ---
 title: 新合众国
-category: 历史
+category: 势力
 summary: 现世主导势力之一，911 的发生地
 keywords: [新合众国]
 tags: [势力]

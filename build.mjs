@@ -330,8 +330,9 @@ const NAV_GROUPS = [
   { title: '非凡物品', pages: ['artifact-relic', 'reactor', 'alchemy', 'essence-economy'] },
   { title: '非凡种族', pages: ['race-human', 'race-fantasy', 'race-dragonkin'] },
   { title: '非凡存在', pages: ['new-gods', 'old-kings', 'outer-gods', 'calamity'] },
+  { title: '势力', pages: ['federation'] },
   { title: '两大工程', pages: ['new-world-project', 'history-official'] },
-  { title: '历史', pages: ['timeline', 'federation'] },
+  { title: '历史', pages: ['timeline'] },
   { title: '检索', pages: ['glossary'] },
 ];
 
