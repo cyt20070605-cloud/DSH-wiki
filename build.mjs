@@ -327,7 +327,7 @@ const NAV_GROUPS = [
   { title: '总览', pages: ['index'] },
   { title: '世界构成', pages: ['world'] },
   { title: '核心规则', pages: ['world-cycle', 'essence', 'law', 'sorcerer', 'power-system', 'correction'] },
-  { title: '非凡物品', pages: ['artifact-relic', 'alchemy', 'alchemy-arms', 'essence-economy'] },
+  { title: '非凡物品', pages: ['artifact-relic', 'reactor', 'alchemy', 'alchemy-arms', 'essence-economy'] },
   { title: '非凡种族', pages: ['race-human', 'race-fantasy', 'race-dragonkin'] },
   { title: '非凡存在', pages: ['new-gods', 'old-kings', 'outer-gods', 'calamity'] },
   { title: '历史', pages: ['timeline', 'history-official', 'federation'] },
