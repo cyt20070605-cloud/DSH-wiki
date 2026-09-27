@@ -1,5 +1,5 @@
 ---
-title: 官方叙事与真实版本
+title: 帷幕工程
 category: 历史
 summary: 三次冲击在普通人眼里的样子，与档案里的事实
 keywords: [官方叙事]

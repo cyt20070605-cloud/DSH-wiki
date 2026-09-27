@@ -65,6 +65,6 @@ updated: 2026-09-15
 ## 相关条目
 
 - [时间线](timeline.md) —— 911 与联合国解体
-- [官方叙事与真实版本](history-official.md) —— 两套历史
+- [帷幕工程](history-official.md) —— 两套历史
 - [旧王](old-kings.md) —— 无邦者与其行动目标
 - [辉石经济](essence-economy.md) —— 联合国遗产的计量标准
