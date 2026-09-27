@@ -57,3 +57,17 @@ updated: 2026-09-15
 - [帷幕工程](history-official.md) —— 两套历史
 - [旧王](old-kings.md) —— 无邦者与其行动目标
 - [辉石](essence-economy.md) —— 联合国遗产的计量标准
+
+## 现世的其他国家
+
+| 国家 | 条目 |
+|---|---|
+| 维多利亚联合王国 | [维多利亚联合王国](victorian-united-kingdom.md) |
+| 圣城法拉伦萨 | [圣城法拉伦萨](holy-faralensa.md) |
+| 欧洲共同体 | [欧洲共同体](european-community.md) |
+| 北方同盟 | [北方同盟](northern-alliance.md) |
+| 新神州 | [新神州](new-shenzhou.md) |
+| 阿萨拉 | [阿萨拉](asara.md) |
+| 重樱 | [重樱](sakura-empire.md) |
+
+> 以上各页均为**占位页**，设定内容尚未展开。本页所列国家为**已知存在的名字**，不含尚未命名的其余「各国官方」。
