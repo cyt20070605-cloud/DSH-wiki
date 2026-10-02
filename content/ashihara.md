@@ -1,8 +1,8 @@
 ---
-title: 圣城法拉伦萨
+title: 苇原
 category: 势力
-summary: 
-keywords: [圣城法拉伦萨]
+summary:
+keywords: [苇原]
 tags: [势力]
 updated: 2026-09-27
 ---
@@ -12,12 +12,12 @@ updated: 2026-09-27
 ## 尚未展开
 
 - 国力与定位
-- 「圣城」之名的由来
 - 政权结构
 - 与[各国官方](history-official.md) 及现世维稳网的关系
+- 与[千年协定](timeline.md)、[帷幕工程](history-official.md) 的关系
 
 ## 相关条目
 
 - [新合众国](federation.md) —— 现世主导势力之一
+- [联合国](timeline.md) —— 2012 年解体的多国协议
 - [帷幕工程](history-official.md) —— 两套并行的历史
-- [旧王](old-kings.md) —— 现世的渗透者
