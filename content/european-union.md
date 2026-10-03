@@ -1,8 +1,8 @@
 ---
-title: 欧洲共同体
+title: 欧陆联盟
 category: 势力
 summary: 
-keywords: [欧洲共同体]
+keywords: [欧陆联盟]
 tags: [势力]
 updated: 2026-09-27
 ---

@@ -63,7 +63,7 @@ updated: 2026-09-15
 | 名称 | 条目 |
 |---|---|
 | 维多利亚 | [维多利亚](victoria.md) |
-| 欧洲共同体 | [欧洲共同体](european-community.md) |
+| 欧陆联盟 | [欧陆联盟](european-union.md) |
 | 北方同盟 | [北方同盟](northern-alliance.md) |
 | 法拉伦萨 | [法拉伦萨](faralensa.md) |
 | 新神州 | [新神州](new-shenzhou.md) |
