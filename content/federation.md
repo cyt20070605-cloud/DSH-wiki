@@ -67,6 +67,7 @@ updated: 2026-09-15
 | 北方同盟 | [北方同盟](northern-alliance.md) |
 | 法拉伦萨 | [法拉伦萨](faralensa.md) |
 | 新神州 | [新神州](new-shenzhou.md) |
+| 巴格达 | [巴格达](baghdad.md) |
 | 阿萨拉 | [阿萨拉](asara.md) |
 | 苇原 | [苇原](ashihara.md) |
 
