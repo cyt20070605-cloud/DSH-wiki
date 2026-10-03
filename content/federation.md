@@ -67,7 +67,7 @@ updated: 2026-09-15
 | 北方同盟 | [北方同盟](northern-alliance.md) |
 | 法拉伦萨 | [法拉伦萨](faralensa.md) |
 | 新神州 | [新神州](new-shenzhou.md) |
-| 中东 | [中东](middle-east.md) |
+| 阿萨拉 | [阿萨拉](asara.md) |
 | 苇原 | [苇原](ashihara.md) |
 
 > 以上各页均为**占位页**，设定内容尚未展开。本表所列是**已知存在的名字**，不含尚未命名的其余「各国官方」。
