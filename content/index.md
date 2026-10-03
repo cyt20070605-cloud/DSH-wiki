@@ -142,7 +142,7 @@ updated: 2026-10-03
 | **非凡物品** | [遗物](artifact-relic.md) · [源质反应堆](reactor.md) · [炼金学](alchemy.md)（含炼金武装）· [辉石](essence-economy.md) |
 | **非凡种族** | [人类](race-human.md) · [奇幻种](race-fantasy.md) · [龙裔](race-dragonkin.md) |
 | **非凡存在** | [新神](new-gods.md) · [旧王](old-kings.md) · [外神](outer-gods.md) · [天灾](calamity.md) |
-| **势力** | [苇原](ashihara.md) · [巴格达](baghdad.md) · [阿萨拉](asara.md) · [新神州](new-shenzhou.md) · [维多利亚](victoria.md) · [北方同盟](northern-alliance.md) · [法拉伦萨](faralensa.md) · [新合众国](federation.md) · [欧陆联盟](european-union.md) |
+| **势力** | [苇原](ashihara.md) · [巴格达](baghdad.md) · [阿萨拉](asara.md) · [新神州](new-shenzhou.md) · [维多利亚](victoria.md) · [北方同盟](northern-alliance.md) · [法拉伦萨](faralensa.md) · [新合众国](federation.md) · [欧陆联合](european-federation.md) |
 | **两大工程** | [新世工程](new-world-project.md) · [帷幕工程](history-official.md) |
 | **历史** | [时间线](timeline.md) |
 | **检索** | [术语索引](glossary.md) —— **按名词查证**：正名／别名对照 |

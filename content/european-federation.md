@@ -1,8 +1,8 @@
 ---
-title: 欧陆联盟
+title: 欧陆联合
 category: 势力
 summary: 
-keywords: [欧陆联盟]
+keywords: [欧陆联合]
 tags: [势力]
 updated: 2026-09-27
 ---
