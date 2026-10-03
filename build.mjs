@@ -341,7 +341,7 @@ const NAV_GROUPS = [
 // 键 = 已退休的 slug，值 = 落点（可带 #锚点）。
 const REDIRECTS = {
   'law-meltdown': { to: 'sorcerer.html#律法熔断', target: '术士' },
-  'passage': { to: 'world.html#四层通行', target: '四层世界' },
+  'passage': { to: 'world.html#阻止区域间通行的方式', target: '四层世界' },
   'alchemy-arms': { to: 'alchemy.html#炼金武装', target: '炼金学' },
   // 势力页改名后的旧网址
   'middle-east': { to: 'asara.html', target: '阿萨拉' },
@@ -403,7 +403,7 @@ function buildLinkMap(pages) {
     环阶: 'power-system.html', 源质抗性: 'sorcerer.html',
     四界: 'power-system.html', 物质界: 'power-system.html', 形成界: 'power-system.html',
     创造界: 'power-system.html', 原型界: 'power-system.html',
-    通行方式: 'world.html#四层通行', 官方叙事: 'history-official.html', 辉石经济: 'essence-economy.html',
+    通行方式: 'world.html#阻止区域间通行的方式', 官方叙事: 'history-official.html', 辉石经济: 'essence-economy.html',
     凝结: 'essence-economy.html', 耐受上限: 'sorcerer.html',
     新合众国: 'federation.html', 新神: 'new-gods.html',
     // 项目独立页（术语一律指向页面自身）
