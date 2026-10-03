@@ -62,7 +62,7 @@ updated: 2026-09-15
 
 | 名称 | 条目 |
 |---|---|
-| 维多利亚联合王国 | [维多利亚联合王国](victorian-united-kingdom.md) |
+| 维多利亚 | [维多利亚](victoria.md) |
 | 欧洲共同体 | [欧洲共同体](european-community.md) |
 | 北方同盟 | [北方同盟](northern-alliance.md) |
 | 法拉伦萨 | [法拉伦萨](faralensa.md) |

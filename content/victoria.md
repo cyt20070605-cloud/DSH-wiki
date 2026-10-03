@@ -1,8 +1,8 @@
 ---
-title: 维多利亚联合王国
+title: 维多利亚
 category: 势力
 summary: 
-keywords: [维多利亚联合王国]
+keywords: [维多利亚]
 tags: [势力]
 updated: 2026-09-27
 ---
