@@ -340,7 +340,8 @@ const NAV_GROUPS = [
 // 以免旧链接、书签、浏览器缓存的旧侧边栏点到 404。
 // 键 = 已退休的 slug，值 = 落点（可带 #锚点）。
 const REDIRECTS = {
-  'law-meltdown': { to: 'sorcerer.html#律法熔断', target: '术士' },
+  // 注：「律法熔断」一节已从术士页撤下，故不再带 #锚点（原锚点已不存在）
+  'law-meltdown': { to: 'sorcerer.html', target: '术士' },
   'passage': { to: 'world.html#阻止区域间通行的方式', target: '四层世界' },
   'alchemy-arms': { to: 'alchemy.html#炼金武装', target: '炼金学' },
   // 势力页改名后的旧网址
