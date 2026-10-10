@@ -327,7 +327,7 @@ const NAV_GROUPS = [
   { title: '总览', pages: ['index'] },
   { title: '世界构成', pages: ['world'] },
   { title: '核心规则', pages: ['world-cycle', 'essence', 'law', 'sorcerer', 'power-system', 'correction'] },
-  { title: '封印物', pages: ['sealed-object', 'reactor', 'golden-tree', 'alchemy', 'essence-economy'] },
+  { title: '非凡物品', pages: ['sealed-object', 'end-ring', 'reactor', 'golden-tree', 'alchemy', 'essence-economy'] },
   { title: '非凡种族', pages: ['race-human', 'race-fantasy', 'race-dragonkin'] },
   { title: '非凡存在', pages: ['new-gods', 'old-kings', 'outer-gods', 'calamity'] },
   { title: '势力', pages: ['ashihara', 'baghdad', 'asara', 'new-shenzhou', 'victoria', 'northern-alliance', 'faralensa', 'federation', 'european-federation'] },
@@ -416,7 +416,7 @@ function buildLinkMap(pages) {
     维多利亚: 'victoria.html', 法拉伦萨: 'faralensa.html',
     欧陆联合: 'european-federation.html', 北方同盟: 'northern-alliance.html',
     新神州: 'new-shenzhou.html', 巴格达: 'baghdad.html', 阿萨拉: 'asara.html', 苇原: 'ashihara.html',
-    // 封印物页
+    // 非凡物品页（封印物 与 其子页 终末之环）
     黄金树: 'golden-tree.html', 金色裂痕: 'golden-tree.html',
   };
   for (const t of priority) if (owner[t]) map.set(t, owner[t]);

@@ -1,6 +1,6 @@
 ---
 title: 炼金学
-category: 封印物
+category: 非凡物品
 summary: 对封印物系统性研究总结出的理论，及其最重要的衍生物「炼金武装」
 keywords: [炼金学, 炼金武装, DEVIL TRIGGER]
 tags: [封印物]

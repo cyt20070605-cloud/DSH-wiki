@@ -1,6 +1,6 @@
 ---
 title: 辉石
-category: 封印物
+category: 非凡物品
 summary: 源质凝结而成的稳定物质形态——世界的能源、术士的源质来源、反应堆的燃料
 keywords: [辉石, 辉石经济]
 tags: [补充设定, 封印物]

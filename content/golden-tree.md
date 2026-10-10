@@ -1,6 +1,6 @@
 ---
 title: 黄金树
-category: 封印物
+category: 非凡物品
 summary: 千禧陆沉后诞生的自然奇观——南极上空贯穿三层世界的金色裂痕，当代源质反应堆的技术来源
 keywords: [黄金树, 金色裂痕]
 tags: [封印物]

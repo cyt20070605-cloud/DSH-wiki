@@ -1,6 +1,6 @@
 ---
 title: 源质反应堆
-category: 封印物
+category: 非凡物品
 summary: 终末之环的仿制品——以辉石为燃料燃烧区域源质，维持修正值为正，并封住边境通路
 keywords: [源质反应堆, 逆向工程]
 tags: [封印物]
