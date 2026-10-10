@@ -327,7 +327,7 @@ const NAV_GROUPS = [
   { title: '总览', pages: ['index'] },
   { title: '世界构成', pages: ['world'] },
   { title: '核心规则', pages: ['world-cycle', 'essence', 'law', 'sorcerer', 'power-system', 'correction'] },
-  { title: '非凡物品', pages: ['artifact-relic', 'reactor', 'golden-tree', 'alchemy', 'essence-economy'] },
+  { title: '封印物', pages: ['sealed-object', 'reactor', 'golden-tree', 'alchemy', 'essence-economy'] },
   { title: '非凡种族', pages: ['race-human', 'race-fantasy', 'race-dragonkin'] },
   { title: '非凡存在', pages: ['new-gods', 'old-kings', 'outer-gods', 'calamity'] },
   { title: '势力', pages: ['ashihara', 'baghdad', 'asara', 'new-shenzhou', 'victoria', 'northern-alliance', 'faralensa', 'federation', 'european-federation'] },
@@ -344,6 +344,8 @@ const REDIRECTS = {
   'law-meltdown': { to: 'sorcerer.html', target: '术士' },
   'passage': { to: 'world.html#阻止区域间通行的方式', target: '四层世界' },
   'alchemy-arms': { to: 'alchemy.html#炼金武装', target: '炼金学' },
+  // 「遗物」改名「封印物」后旧网址的静默跳转
+  'artifact-relic': { to: 'sealed-object.html', target: '封印物' },
   // 势力页改名后的旧网址
   'middle-east': { to: 'asara.html', target: '阿萨拉' },
   'holy-faralensa': { to: 'faralensa.html', target: '法拉伦萨' },
@@ -392,10 +394,10 @@ function buildLinkMap(pages) {
     for (const kw of p.keywords) if (kw && kw.length >= 2) map.set(kw, p.file);
   }
   // 精确名词优先：代码名【】内的词优先绑定到其所属条目
-  const priority = ['原初律法', '无上意志', '修正值', '炼金武装', '遗物', '封印物', '灰潮使徒', '灰潮构造体', 'DEVIL TRIGGER', '终末之环', '世界引擎', '先锋守望', '帷幕工程', '千年协定', '帝国轴心', '绛天之龙', '铸形之炎', '伏行之恶', '轮回终末', '百相熔炉协会', '永世集团', '黄金黎明结社', '无邦者', '辉石', '魔人', '亚龙', '四界', '永诀律法之新世', '新世工程', '维多利亚', '法拉伦萨', '欧陆联合', '北方同盟', '新合众国', '新神州', '巴格达', '阿萨拉', '苇原', '金色裂痕', '黄金树'];
+  const priority = ['原初律法', '无上意志', '修正值', '炼金武装', '封印物', '灰潮使徒', '灰潮构造体', 'DEVIL TRIGGER', '终末之环', '世界引擎', '先锋守望', '帷幕工程', '千年协定', '帝国轴心', '绛天之龙', '铸形之炎', '伏行之恶', '轮回终末', '百相熔炉协会', '永世集团', '黄金黎明结社', '无邦者', '辉石', '魔人', '亚龙', '四界', '永诀律法之新世', '新世工程', '维多利亚', '法拉伦萨', '欧陆联合', '北方同盟', '新合众国', '新神州', '巴格达', '阿萨拉', '苇原', '金色裂痕', '黄金树'];
   const owner = {
     原初律法: 'law.html', 无上意志: 'outer-gods.html', 修正值: 'correction.html', 炼金武装: 'alchemy.html#炼金武装',
-    遗物: 'artifact-relic.html', 灰潮使徒: 'calamity.html', 灰潮构造体: 'calamity.html',    'DEVIL TRIGGER': 'calamity.html', 终末之环: 'artifact-relic.html', 世界引擎: 'timeline.html',
+    封印物: 'sealed-object.html', 灰潮使徒: 'calamity.html', 灰潮构造体: 'calamity.html',    'DEVIL TRIGGER': 'calamity.html', 终末之环: 'sealed-object.html', 世界引擎: 'timeline.html',
     先锋守望: 'timeline.html', 帷幕工程: 'timeline.html', 千年协定: 'timeline.html', 帝国轴心: 'timeline.html',
     绛天之龙: 'outer-gods.html', 铸形之炎: 'outer-gods.html', 伏行之恶: 'outer-gods.html', 轮回终末: 'outer-gods.html',
     百相熔炉协会: 'old-kings.html', 永世集团: 'old-kings.html', 黄金黎明结社: 'old-kings.html', 无邦者: 'old-kings.html',
@@ -414,7 +416,7 @@ function buildLinkMap(pages) {
     维多利亚: 'victoria.html', 法拉伦萨: 'faralensa.html',
     欧陆联合: 'european-federation.html', 北方同盟: 'northern-alliance.html',
     新神州: 'new-shenzhou.html', 巴格达: 'baghdad.html', 阿萨拉: 'asara.html', 苇原: 'ashihara.html',
-    // 非凡物品页
+    // 封印物页
     黄金树: 'golden-tree.html', 金色裂痕: 'golden-tree.html',
   };
   for (const t of priority) if (owner[t]) map.set(t, owner[t]);
