@@ -394,7 +394,7 @@ function buildLinkMap(pages) {
     for (const kw of p.keywords) if (kw && kw.length >= 2) map.set(kw, p.file);
   }
   // 精确名词优先：代码名【】内的词优先绑定到其所属条目
-  const priority = ['原初律法', '无上意志', '修正值', '炼金武装', '封印物', '灰潮使徒', '灰潮构造体', 'DEVIL TRIGGER', '终末之环', '世界引擎', '先锋守望', '帷幕工程', '千年协定', '帝国轴心', '绛天之龙', '铸形之炎', '伏行之恶', '轮回终末', '百相熔炉', '永世集团', '黄金黎明', '世外天堂', '辉石', '魔人', '亚龙', '四界', '永诀律法之新世', '新世工程', '维多利亚', '法拉伦萨', '欧陆联合', '北方同盟', '新合众国', '新神州', '巴格达', '阿萨拉', '苇原', '金色裂痕', '黄金树'];
+  const priority = ['原初律法', '无上意志', '修正值', '炼金武装', '封印物', '灰潮使徒', '灰潮构造体', 'DEVIL TRIGGER', '终末之环', '世界引擎', '先锋守望', '帷幕工程', '千年协定', '帝国轴心', '绛天之龙', '铸形之炎', '伏行之恶', '轮回终末', '百相熔炉', '永世集团', '黄金黎明', '世外天堂', '辉石', '魔人', '亚龙', '四界', '新世工程', '新世', '维多利亚', '法拉伦萨', '欧陆联合', '北方同盟', '新合众国', '新神州', '巴格达', '阿萨拉', '苇原', '金色裂痕', '黄金树'];
   const owner = {
     原初律法: 'law.html', 无上意志: 'outer-gods.html', 修正值: 'correction.html', 炼金武装: 'alchemy.html#炼金武装',
     封印物: 'sealed-object.html', 灰潮使徒: 'calamity.html', 灰潮构造体: 'calamity.html',    'DEVIL TRIGGER': 'calamity.html', 终末之环: 'sealed-object.html', 世界引擎: 'timeline.html',
@@ -411,7 +411,7 @@ function buildLinkMap(pages) {
     新合众国: 'federation.html', 新神: 'new-gods.html',
     // 项目独立页（术语一律指向页面自身）
     帷幕工程: 'history-official.html', 新世工程: 'new-world-project.html',
-    永诀律法之新世: 'new-world-project.html',
+    新世: 'new-world-project.html',
     // 势力页（各页术语一律指向页面自身）
     维多利亚: 'victoria.html', 法拉伦萨: 'faralensa.html',
     欧陆联合: 'european-federation.html', 北方同盟: 'northern-alliance.html',
