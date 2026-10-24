@@ -70,7 +70,7 @@ updated: 2026-10-03
 | **非凡种族** | [人类](race-human.md) · [奇幻种](race-fantasy.md) · [龙裔](race-dragonkin.md) |
 | **非凡存在** | [新神](new-gods.md) · [旧王](old-kings.md) · [外神](outer-gods.md) · [天灾](calamity.md) |
 | **势力** | [苇原](ashihara.md) · [巴格达](baghdad.md) · [阿萨拉](asara.md) · [新神州](new-shenzhou.md) · [维多利亚](victoria.md) · [北方同盟](northern-alliance.md) · [法拉伦萨](faralensa.md) · [新合众国](federation.md) · [欧陆联合](european-federation.md) |
-| **两大工程** | [新世工程](new-world-project.md) · [帷幕工程](history-official.md) |
+| **重要事件** | [新世工程](new-world-project.md) · [破碎战争](shatter-war.md) · [震怒之日](day-of-wrath.md) · [千禧陆沉](millennium-sinking.md) · [帷幕工程](history-official.md) |
 | **历史** | [时间线](timeline.md) |
 | **检索** | [术语索引](glossary.md) —— **按名词查证**：正名／别名对照 |
 
@@ -80,6 +80,6 @@ updated: 2026-10-03
 - **按规则机制**：核心规则——[纪元](world-cycle.md)（最底层的时间尺度）、[源质](essence.md)、[律法](law.md)、[术士](sorcerer.md)、[能力体系](power-system.md)（位格的四个阶段）、[修正值](correction.md)。
 - **按势力与存在**：[新神](new-gods.md)、[外神](outer-gods.md)、[旧王](old-kings.md)、[天灾](calamity.md)；现世各国见 [势力](federation.md) 栏。
 - **按前文明的遗产**：[封印物](sealed-object.md)（世界毁灭后的文明残余，含前文明的至高造物「终末之环」）；血脉两支——[人类](race-human.md) 与 [奇幻种](race-fantasy.md)。
-- **按产业与通路**：[辉石](essence-economy.md)、[四层通行](world.md#阻止区域间通行的方式)。
-- **按事件与工程**：[新世工程](new-world-project.md)（前文明）、[帷幕工程](history-official.md)（当代）、[源质反应堆](reactor.md)（现世的续命手段）。
+- **按产业与通路**：[辉石](essence-economy.md)、[四层通行](world.md#区域间通行的方式)。
+- **按事件与工程**：[新世工程](new-world-project.md)（前文明）· [破碎战争](shatter-war.md)（第一次冲击）· [震怒之日](day-of-wrath.md)（第二次冲击）· [千禧陆沉](millennium-sinking.md)（第三次冲击）· [帷幕工程](history-official.md)（当代）· [源质反应堆](reactor.md)（现世的续命手段）。
 - **按名词查证**：[术语索引](glossary.md) 提供正名／别名对照。

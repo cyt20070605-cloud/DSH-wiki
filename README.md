@@ -48,6 +48,10 @@ wiki/
 │   ├── outer-gods.md           外神
 │   ├── calamity.md             天灾
 │   ├── timeline.md             时间线
+│   ├── new-world-project.md    新世工程（重要事件）
+│   ├── shatter-war.md          破碎战争 / 第一次冲击（重要事件）
+│   ├── day-of-wrath.md         震怒之日 / 第二次冲击（重要事件）
+│   ├── millennium-sinking.md   千禧陆沉 / 第三次冲击（重要事件）
 │   ├── history-official.md     官方叙事与真实版本
 │   ├── federation.md           新合众国
 │   └── glossary.md             术语索引
@@ -60,7 +64,7 @@ wiki/
 └── site/                  # 构建产物（自动生成，可随时删除重建）
 ```
 
-> **共 34 篇。**（上面只列了主要条目，完整清单见 `content/`。）新增 `content/*.md` 后，还需在 `build.mjs` 的 `NAV_GROUPS` 里登记文件名，否则不会出现在侧边栏。
+> **共 37 篇。**（上面只列了主要条目，完整清单见 `content/`。）新增 `content/*.md` 后，还需在 `build.mjs` 的 `NAV_GROUPS` 里登记文件名，否则不会出现在侧边栏。
 
 ## 改内容
 
