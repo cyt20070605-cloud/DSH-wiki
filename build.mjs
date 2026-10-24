@@ -423,7 +423,8 @@ function buildLinkMap(pages) {
   return map;
 }
 
-function renderSidebar(pages, currentKey) {
+/** 侧栏分组（NAV_GROUPS 顺序 + 未被收录的页面兜到「其它」） */
+function groupPages(pages) {
   const groups = [];
   const placed = new Set();
   for (const g of NAV_GROUPS) {
@@ -434,57 +435,143 @@ function renderSidebar(pages, currentKey) {
   }
   const rest = [...pages.values()].filter((p) => !placed.has(p.key));
   if (rest.length) groups.push({ title: '其它', items: rest });
+  return groups;
+}
 
-  return groups
+/** 阅读顺序（上一页 / 下一页用） */
+function orderedPages(pages) {
+  return groupPages(pages).flatMap((g) => g.items);
+}
+
+function renderSidebar(groups, currentKey) {
+  const sections = groups
     .map((g) => {
       const links = g.items
         .map((p) => {
-          const active = p.key === currentKey ? ' class="active"' : '';
-          return `<li><a href="${escapeAttr(p.file)}"${active}><span class="nav-title">${escapeHtml(p.title)}</span>${p.summary ? `<span class="nav-sub">${escapeHtml(p.summary)}</span>` : ''}</a></li>`;
+          const active = p.key === currentKey ? ' class="active" aria-current="page"' : '';
+          const sub = p.summary ? `<span class="nav-sub">${escapeHtml(p.summary)}</span>` : '';
+          return `<li><a href="${escapeAttr(p.file)}"${active}><span class="nav-title">${escapeHtml(p.title)}</span>${sub}</a></li>`;
         })
-        .join('');
-      return `<section class="nav-group"><h3>${escapeHtml(g.title)}</h3><ul>${links}</ul></section>`;
+        .join('\n          ');
+      return `      <section class="nav-group" data-group="${escapeAttr(g.title)}">
+        <button class="nav-head" type="button" aria-expanded="true"><span>${escapeHtml(g.title)}</span><span class="caret" aria-hidden="true">▾</span></button>
+        <ul class="nav-list">
+          ${links}
+        </ul>
+      </section>`;
     })
-    .join('');
+    .join('\n');
+
+  return `    <div class="nav-filter">
+      <input id="nav-filter" type="search" placeholder="过滤条目…" aria-label="过滤条目" autocomplete="off">
+    </div>
+    <div class="nav-scroll" id="nav-scroll">
+${sections}
+      <p class="nav-empty" hidden>没有匹配的条目</p>
+    </div>`;
 }
 
-function pageShell({ pages, page, content, toc }) {
-  const nav = renderSidebar(pages, page.key);
+const ICON_SEARCH = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>`;
+const ICON_SUN = `<svg class="i-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"></circle><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M18.4 5.6L17 7M7 17l-1.4 1.4"></path></svg>`;
+const ICON_MOON = `<svg class="i-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a7 7 0 1 0 10.5 10.5Z"></path></svg>`;
+
+function pageShell({ pages, page, content, toc, prev, next }) {
+  const groups = groupPages(pages);
+  const nav = renderSidebar(groups, page.key);
+  const groupTitle = (groups.find((g) => g.items.some((p) => p.key === page.key)) || {}).title || '';
+
+  const crumbs = [
+    `<a href="index.html">${escapeHtml(SITE_TITLE)}</a>`,
+    groupTitle ? `<span class="sep">/</span><span>${escapeHtml(groupTitle)}</span>` : '',
+    page.category && page.category !== groupTitle ? `<span class="sep">/</span><span>${escapeHtml(page.category)}</span>` : '',
+  ].join('');
+
   const tocHtml = toc.length
-    ? `<nav class="toc"><h4>本页目录</h4><ul>${toc.map((h, idx) => `<li><a href="#${escapeAttr(h.id)}">${escapeHtml(h.text)}</a></li>`).join('')}</ul></nav>`
-    : '';
+    ? `<nav class="toc" aria-label="本页目录"><p class="rail-title">本页目录</p><ul>${toc
+        .map((h) => `<li><a href="#${escapeAttr(h.id)}">${escapeHtml(h.text)}</a></li>`)
+        .join('')}</ul></nav>`
+    : `<p class="rail-empty">本页无分节</p>`;
+
+  const pagerCell = (p, dir, label) =>
+    p
+      ? `<a class="${dir}" href="${escapeAttr(p.file)}"><span class="p-label">${label}</span><span class="p-title">${escapeHtml(p.title)}</span></a>`
+      : `<span class="spacer" aria-hidden="true"></span>`;
+  const pager =
+    prev || next
+      ? `    <nav class="pager" aria-label="翻页">
+      ${pagerCell(prev, 'prev', '← 上一篇')}
+      ${pagerCell(next, 'next', '下一篇 →')}
+    </nav>`
+      : '';
+
   return `<!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${escapeHtml(page.title)} · ${escapeHtml(SITE_TITLE)}</title>
 <meta name="description" content="${escapeAttr(page.summary || SITE_TITLE)}">
 <meta name="robots" content="noindex,nofollow">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#080a10">
+<script>try{var t=localStorage.getItem('wiki-theme');if(!t){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';}document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<input id="nav-toggle" type="checkbox" hidden>
+<a class="skip-link" href="#content">跳到正文</a>
+<div class="read-progress" id="progress" aria-hidden="true"></div>
+<div class="scrim" id="scrim" aria-hidden="true"></div>
+
 <header class="topbar">
-  <label for="nav-toggle" class="burger" title="目录">☰</label>
-  <a class="brand" href="index.html"><span class="brand-main">${escapeHtml(SITE_TITLE)}</span><span class="brand-sub">${escapeHtml(SITE_SUB)}</span></a>
-  <div class="search-box">
-    <input id="q" type="search" placeholder="搜索设定…（点击或按 / 聚焦）" autocomplete="off" spellcheck="false">
-    <div id="results" class="results" hidden></div>
+  <button class="burger" id="nav-open" type="button" aria-label="打开目录" aria-expanded="false">☰</button>
+  <a class="brand" href="index.html">
+    <span class="brand-mark" aria-hidden="true">源</span>
+    <span class="brand-body">
+      <span class="brand-main">${escapeHtml(SITE_TITLE)}</span>
+      <span class="brand-sub">${escapeHtml(SITE_SUB)}</span>
+    </span>
+  </a>
+  <div class="search">
+    <div class="search-field">
+      ${ICON_SEARCH}
+      <input id="q" type="search" placeholder="搜索设定…" aria-label="搜索设定" autocomplete="off" spellcheck="false">
+      <span class="search-kbd" aria-hidden="true">/</span>
+    </div>
+    <div id="results" class="results" role="listbox" aria-label="搜索结果" hidden></div>
   </div>
+  <button class="icon-btn" id="theme-toggle" type="button" aria-label="切换深色 / 浅色主题">${ICON_SUN}${ICON_MOON}</button>
 </header>
+
 <div class="layout">
-  <aside class="sidebar">${nav}</aside>
-  <main class="content">
+  <aside class="sidebar" id="nav" aria-label="条目目录">
+${nav}
+  </aside>
+
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="位置">${crumbs}</nav>
     <article class="article">
-      <h1>${escapeHtml(page.title)}</h1>
-      <p class="meta">${page.category ? `<span class="chip">${escapeHtml(page.category)}</span>` : ''}${page.tags.map((t) => `<span class="chip ghost">${escapeHtml(t)}</span>`).join('')}${page.updated ? `<span class="updated">更新：${escapeHtml(page.updated)}</span>` : ''}</p>
-      ${content}
+      <header class="doc-head">
+        <h1 class="doc-title">${escapeHtml(page.title)}</h1>
+        ${page.summary ? `<p class="doc-lead">${escapeHtml(page.summary)}</p>` : ''}
+        <p class="meta">${page.category ? `<span class="chip">${escapeHtml(page.category)}</span>` : ''}${page.tags.map((t) => `<span class="chip ghost">${escapeHtml(t)}</span>`).join('')}${page.updated ? `<span class="updated">更新：${escapeHtml(page.updated)}</span>` : ''}</p>
+      </header>
+      <div class="prose">
+${content}
+      </div>
     </article>
-    ${tocHtml}
-    <footer class="footer">本地静态 Wiki · 内容源：<code>content/*.md</code> · 由 <code>build.mjs</code> 生成</footer>
+${pager}
+    <footer class="footer">
+      <div>本地静态 Wiki · 内容源 <code>content/*.md</code> · 由 <code>build.mjs</code> 生成</div>
+      <div>${escapeHtml(SITE_TITLE)} · ${escapeHtml(SITE_SUB)}</div>
+    </footer>
   </main>
+
+  <aside class="rail" aria-label="本页导航">
+    ${tocHtml}
+  </aside>
 </div>
+
+<button class="to-top" id="to-top" type="button" aria-label="回到顶部">↑</button>
 <script src="search-index.js"></script>
 <script src="app.js"></script>
 </body>
@@ -505,11 +592,15 @@ function build() {
   fs.mkdirSync(OUT_DIR, { recursive: true });
 
   const searchIndex = [];
+  const order = orderedPages(pages);
   for (const page of pages.values()) {
     globalThis.__LINKED__ = new Set(); // 每页重置「首次出现」去重
     const { html, headings, plain } = renderMarkdown(page.body, page.file, page.autolink);
     const outFile = path.join(OUT_DIR, page.file);
-    fs.writeFileSync(outFile, pageShell({ pages, page, content: html, toc: headings }), 'utf8');
+    const pos = order.findIndex((p) => p.key === page.key);
+    const prev = pos > 0 ? order[pos - 1] : null;
+    const next = pos >= 0 && pos < order.length - 1 ? order[pos + 1] : null;
+    fs.writeFileSync(outFile, pageShell({ pages, page, content: html, toc: headings, prev, next }), 'utf8');
 
     searchIndex.push({
       title: page.title,
@@ -521,8 +612,9 @@ function build() {
     });
   }
 
-  fs.writeFileSync(path.join(OUT_DIR, 'style.css'), STYLE, 'utf8');
-  fs.writeFileSync(path.join(OUT_DIR, 'app.js'), APP_JS, 'utf8');
+  // 样式与脚本来自 assets/，构建时原样拷贝进产物目录（改样式只需改 assets/*）
+  fs.writeFileSync(path.join(OUT_DIR, 'style.css'), readAsset('style.css'), 'utf8');
+  fs.writeFileSync(path.join(OUT_DIR, 'app.js'), readAsset('app.js'), 'utf8');
   // 未公开的设定稿：默认禁止搜索引擎收录。若要公开可自行删除本段与 HTML 里的 robots meta。
   fs.writeFileSync(
     path.join(OUT_DIR, 'robots.txt'),
@@ -606,186 +698,18 @@ function serve(port) {
 
 /* ---------------------------------------------------------------- assets */
 
-const STYLE = `:root{
-  --bg:#0f1218; --bg-soft:#151a23; --bg-card:#1a212c; --line:#28323f;
-  --fg:#e6ecf4; --fg-dim:#9aa8ba; --accent:#7cc4ff; --accent-dim:#3d7fb0;
-  --gold:#e2c98a; --radius:10px;
-  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Cascadia Mono",monospace;
-  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+// 样式与客户端脚本放在 assets/ 下，构建时原样拷贝到 site/。
+// 这样改 UI 不必再动本文件，也免去在模板字符串里转义反引号与 ${}。
+const ASSET_DIR = path.join(ROOT, 'assets');
+
+function readAsset(name) {
+  const file = path.join(ASSET_DIR, name);
+  if (!fs.existsSync(file)) {
+    console.error(`缺少资源文件：assets/${name}`);
+    process.exit(1);
+  }
+  return fs.readFileSync(file, 'utf8');
 }
-*{box-sizing:border-box}
-html,body{margin:0;padding:0}
-body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:15.5px;line-height:1.75}
-a{color:var(--accent);text-decoration:none}
-a:hover{text-decoration:underline}
-code{font-family:var(--mono);font-size:.9em;background:#232c38;padding:.1em .4em;border-radius:5px}
-code.code{background:transparent;color:var(--gold);font-weight:600}
-em.quoted{color:var(--gold);font-style:normal}
-
-/* topbar */
-.topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:14px;padding:10px 18px;background:rgba(15,18,24,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-.brand{display:flex;flex-direction:column;line-height:1.2;color:var(--fg)}
-.brand:hover{text-decoration:none}
-.brand-main{font-weight:700;letter-spacing:.5px}
-.brand-sub{font-size:11.5px;color:var(--fg-dim);letter-spacing:.4px}
-.burger{display:none;cursor:pointer;font-size:20px;padding:0 6px;color:var(--fg-dim)}
-.search-box{position:relative;margin-left:auto;width:min(420px,45vw)}
-#q{width:100%;padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:var(--bg-soft);color:var(--fg);font-family:var(--sans);font-size:14px}
-#q:focus{outline:none;border-color:var(--accent-dim);box-shadow:0 0 0 3px rgba(124,196,255,.12)}
-.results{position:absolute;top:calc(100% + 6px);right:0;width:min(560px,80vw);max-height:60vh;overflow:auto;background:var(--bg-card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 12px 32px rgba(0,0,0,.45)}
-.results .r{padding:10px 13px;border-bottom:1px solid var(--line);cursor:pointer;display:block;color:var(--fg)}
-.results .r:last-child{border-bottom:none}
-.results .r:hover,.results .r.on{background:#222b38;text-decoration:none}
-.results .r-t{font-weight:600;font-size:14px}
-.results .r-t .cat{font-weight:400;font-size:11.5px;color:var(--fg-dim);margin-left:6px}
-.results .r-s{font-size:12.5px;color:var(--fg-dim);margin-top:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.results mark{background:rgba(226,201,138,.25);color:var(--gold);border-radius:3px;padding:0 2px}
-.results .empty{padding:14px;color:var(--fg-dim);font-size:13px}
-
-/* layout */
-.layout{display:grid;grid-template-columns:274px minmax(0,1fr);gap:28px;max-width:1400px;margin:0 auto;padding:22px 18px 60px}
-.sidebar{position:sticky;top:64px;align-self:start;max-height:calc(100vh - 84px);overflow:auto;padding-right:6px}
-.nav-group{margin-bottom:16px}
-.nav-group h3{margin:0 0 6px;font-size:11.5px;letter-spacing:1.2px;color:var(--fg-dim);text-transform:uppercase;font-weight:600}
-.nav-group ul{list-style:none;margin:0;padding:0}
-.nav-group li a{display:flex;flex-direction:column;padding:6px 10px;border-radius:8px;color:var(--fg);border-left:2px solid transparent}
-.nav-group li a:hover{background:var(--bg-soft);text-decoration:none}
-.nav-group li a.active{background:var(--bg-card);border-left-color:var(--accent)}
-.nav-title{font-size:14px}
-.nav-sub{font-size:11px;color:var(--fg-dim);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-
-/* article */
-.article{background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius);padding:26px 30px}
-.article h1{margin:0 0 8px;font-size:27px;letter-spacing:.5px}
-.article h2{margin:30px 0 10px;font-size:20px;padding-bottom:6px;border-bottom:1px solid var(--line)}
-.article h3{margin:22px 0 8px;font-size:16.5px;color:var(--gold)}
-.article h4{margin:18px 0 6px;font-size:15px}
-.article p{margin:10px 0}
-.article ul,.article ol{margin:10px 0;padding-left:22px}
-.article li{margin:5px 0}
-.article blockquote{margin:12px 0;padding:10px 16px;border-left:3px solid var(--accent-dim);background:#131922;border-radius:0 8px 8px 0;color:#cfd9e6}
-.article hr{border:none;border-top:1px dashed var(--line);margin:26px 0}
-pre.code{background:#0c1016;border:1px solid var(--line);border-radius:8px;padding:14px 16px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.65;color:#c7d6e8}
-pre.code code{background:transparent;padding:0;font-size:inherit}
-.anchor{opacity:0;margin-left:8px;font-weight:400;font-size:14px;color:var(--fg-dim)}
-h2:hover .anchor,h3:hover .anchor{opacity:1}
-.meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 18px}
-.chip{font-size:11.5px;padding:2px 9px;border-radius:99px;background:#22303f;color:var(--accent);border:1px solid #2b3d50}
-.chip.ghost{background:transparent;color:var(--fg-dim);border-color:var(--line)}
-.updated{font-size:11.5px;color:var(--fg-dim)}
-.table-wrap{overflow-x:auto;margin:14px 0}
-table{border-collapse:collapse;width:100%;font-size:14px}
-th,td{border:1px solid var(--line);padding:7px 11px;text-align:left;vertical-align:top}
-th{background:#1d2632;color:var(--gold);font-weight:600;white-space:nowrap}
-tbody tr:nth-child(even){background:#171e28}
-a.term{border-bottom:1px dashed var(--accent-dim)}
-a.ext::after{content:"↗";font-size:11px;margin-left:2px;color:var(--fg-dim)}
-
-/* toc */
-.toc{margin-top:18px;background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius);padding:14px 18px}
-.toc h4{margin:0 0 8px;font-size:12px;letter-spacing:1px;color:var(--fg-dim);text-transform:uppercase}
-.toc ul{list-style:none;margin:0;padding:0;columns:2;column-gap:24px}
-.toc li{margin:3px 0;font-size:13.5px}
-.footer{margin-top:26px;color:var(--fg-dim);font-size:12px;text-align:center}
-
-@media (max-width:900px){
-  .burger{display:block}
-  .layout{grid-template-columns:1fr;padding:16px 12px 50px}
-  .sidebar{position:fixed;top:56px;left:0;bottom:0;width:280px;max-height:none;background:var(--bg-soft);border-right:1px solid var(--line);padding:16px;transform:translateX(-102%);transition:transform .2s ease;z-index:25}
-  #nav-toggle:checked ~ .layout .sidebar{transform:none}
-  .article{padding:18px 16px}
-  .toc ul{columns:1}
-  .search-box{width:auto;flex:1}
-}
-`;
-
-const APP_JS = `(function(){
-  var idx = window.__WIKI_INDEX__ || [];
-  var q = document.getElementById('q');
-  var box = document.getElementById('results');
-  if(!q || !box) return;
-
-  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
-  function mark(text, terms){
-    var out = esc(text);
-    terms.forEach(function(t){
-      if(t.length < 1) return;
-      var re = new RegExp('(' + t.replace(/[.*+?^\${}()|[\\]\\\\]/g,'\\\\$&') + ')','gi');
-      out = out.replace(re,'<mark>$1</mark>');
-    });
-    return out;
-  }
-  function snippet(body, terms){
-    var lower = body.toLowerCase();
-    var pos = -1;
-    for(var i=0;i<terms.length;i++){
-      pos = lower.indexOf(terms[i].toLowerCase());
-      if(pos >= 0) break;
-    }
-    if(pos < 0) pos = 0;
-    var start = Math.max(0, pos - 40);
-    return (start > 0 ? '…' : '') + body.slice(start, start + 150) + '…';
-  }
-  function search(raw){
-    var terms = raw.trim().split(/\\s+/).filter(Boolean);
-    if(!terms.length) return [];
-    var res = [];
-    idx.forEach(function(p){
-      var hay = (p.title + ' ' + p.category + ' ' + (p.headings||[]).join(' ') + ' ' + p.body).toLowerCase();
-      var score = 0, ok = true;
-      terms.forEach(function(t){
-        var n = hay.split(t.toLowerCase()).length - 1;
-        if(n === 0){ ok = false; return; }
-        score += n;
-        if(p.title.toLowerCase().indexOf(t.toLowerCase()) >= 0) score += 12;
-        if(p.category.toLowerCase().indexOf(t.toLowerCase()) >= 0) score += 3;
-      });
-      if(ok) res.push({ p: p, score: score, terms: terms });
-    });
-    res.sort(function(a,b){ return b.score - a.score; });
-    return res.slice(0, 8);
-  }
-  var last = [];
-  function render(raw){
-    last = search(raw);
-    if(!raw.trim()){ box.hidden = true; box.innerHTML=''; return; }
-    box.hidden = false;
-    if(!last.length){ box.innerHTML = '<div class="empty">没有匹配的条目</div>'; return; }
-    box.innerHTML = last.map(function(r,i){
-      return '<a class="r' + (i===0?' on':'') + '" href="' + r.p.url + '">' +
-        '<div class="r-t">' + mark(r.p.title, r.terms) + '<span class="cat">' + esc(r.p.category) + '</span></div>' +
-        '<div class="r-s">' + mark(snippet(r.p.body, r.terms), r.terms) + '</div></a>';
-    }).join('');
-  }
-  q.addEventListener('input', function(){ render(q.value); });
-  q.addEventListener('focus', function(){ if(q.value.trim()) render(q.value); });
-  document.addEventListener('click', function(e){
-    if(!box.contains(e.target) && e.target !== q) box.hidden = true;
-  });
-  q.addEventListener('keydown', function(e){
-    var items = box.querySelectorAll('.r');
-    if(!items.length) return;
-    var cur = Array.prototype.indexOf.call(items, box.querySelector('.r.on'));
-    if(e.key === 'ArrowDown' || e.key === 'ArrowUp'){
-      e.preventDefault();
-      cur = e.key === 'ArrowDown' ? (cur + 1) % items.length : (cur - 1 + items.length) % items.length;
-      items.forEach(function(el){ el.classList.remove('on'); });
-      items[cur].classList.add('on');
-      items[cur].scrollIntoView({ block:'nearest' });
-    } else if(e.key === 'Enter'){
-      e.preventDefault();
-      (items[cur] || items[0]).click();
-    } else if(e.key === 'Escape'){
-      box.hidden = true; q.blur();
-    }
-  });
-  document.addEventListener('keydown', function(e){
-    if(e.key === '/' && document.activeElement !== q){
-      e.preventDefault(); q.focus();
-    }
-  });
-})();
-`;
 
 /* -------------------------------------------------------------------- run */
 
