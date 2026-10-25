@@ -395,7 +395,7 @@ function buildLinkMap(pages) {
     for (const kw of p.keywords) if (kw && kw.length >= 2) map.set(kw, p.file);
   }
   // 精确名词优先：代码名【】内的词优先绑定到其所属条目
-  const priority = ['原初律法', '无上意志', '修正值', '炼金武装', '封印物', '灰潮使徒', '灰潮构造体', 'DEVIL TRIGGER', '终末之环', '世界引擎', '先锋守望', '帷幕计划', '千年协定', '帝国轴心', '绛天之龙', '铸形之炎', '伏行之恶', '轮回终末', '百相熔炉', '永世集团', '黄金黎明', '世外天堂', '辉石', '魔人', '亚龙', '四界', '新世工程', '新世', '破碎战争', '第一次冲击', '震怒之日', '第二次冲击', '千禧陆沉', '第三次冲击', '维多利亚', '法拉伦萨', '欧陆联合', '北方同盟', '新合众国', '新神州', '巴格达', '阿萨拉', '苇原', '金色裂痕', '黄金树'];
+  const priority = ['原初律法', '律法', '无上意志', '修正值', '炼金武装', '封印物', '灰潮使徒', '灰潮构造体', 'DEVIL TRIGGER', '终末之环', '世界引擎', '先锋守望', '帷幕计划', '千年协定', '帝国轴心', '绛天之龙', '铸形之炎', '伏行之恶', '轮回终末', '百相熔炉', '永世集团', '黄金黎明', '世外天堂', '辉石', '魔人', '亚龙', '四界', '新世工程', '新世', '破碎战争', '第一次冲击', '震怒之日', '第二次冲击', '千禧陆沉', '第三次冲击', '维多利亚', '法拉伦萨', '欧陆联合', '北方同盟', '新合众国', '新神州', '巴格达', '阿萨拉', '苇原', '金色裂痕', '黄金树'];
   const owner = {
     原初律法: 'law.html', 无上意志: 'outer-gods.html', 修正值: 'correction.html', 炼金武装: 'alchemy.html#炼金武装',
     封印物: 'sealed-object.html', 灰潮使徒: 'calamity.html', 灰潮构造体: 'calamity.html',    'DEVIL TRIGGER': 'calamity.html', 终末之环: 'sealed-object.html', 世界引擎: 'timeline.html',
@@ -409,7 +409,7 @@ function buildLinkMap(pages) {
     创造界: 'power-system.html', 原型界: 'power-system.html',
     通行方式: 'world.html#阻止区域间通行的方式', 官方叙事: 'history-official.html', 辉石经济: 'essence-economy.html',
     凝结: 'essence-economy.html', 耐受上限: 'sorcerer.html',
-    新合众国: 'federation.html', 神明: 'new-gods.html',
+    新合众国: 'federation.html', 神明: 'new-gods.html', 律法: 'law.html',
     // 项目独立页（术语一律指向页面自身）
     帷幕计划: 'history-official.html', 新世工程: 'new-world-project.html',
     新世: 'new-world-project.html',
