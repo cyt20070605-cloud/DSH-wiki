@@ -66,7 +66,7 @@ updated: 2026-10-03
 | **总览** | [首页](index.md) |
 | **世界构成** | [四层世界](world.md) —— 群星 / 现世 / 边境 / 旧域 |
 | **核心规则** | [纪元](world-cycle.md)（世界往复与时间尺度）· [源质](essence.md) · [律法](law.md) · [术士](sorcerer.md) · [能力体系](power-system.md)（位格的四个阶段）· [修正值](correction.md) |
-| **封印物** | [封印物](sealed-object.md) · [源质反应堆](reactor.md) · [炼金学](alchemy.md)（含炼金武装）· [辉石](essence-economy.md) |
+| **封印物** | [封印物](sealed-object.md) · [源质反应堆](reactor.md) · [炼金武装](alchemy.md)（含炼金学）· [辉石](essence-economy.md) |
 | **非凡种族** | [人类](race-human.md) · [奇幻种](race-fantasy.md) · [龙裔](race-dragonkin.md) |
 | **非凡存在** | [神明](new-gods.md) · [旧王](old-kings.md) · [外神](outer-gods.md) · [天灾](calamity.md) |
 | **势力** | [苇原](ashihara.md) · [巴格达](baghdad.md) · [阿萨拉](asara.md) · [新神州](new-shenzhou.md) · [维多利亚](victoria.md) · [北方同盟](northern-alliance.md) · [法拉伦萨](faralensa.md) · [新合众国](federation.md) · [欧陆联合](european-federation.md) |
