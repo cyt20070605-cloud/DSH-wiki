@@ -65,5 +65,5 @@ updated: 2026-09-27
 - [时间线](timeline.md) —— 完整的原始历史叙述
 - [千禧陆沉](millennium-sinking.md) —— 第三次冲击
 - [旧王](old-kings.md) —— 世外天堂的归属
-- [四层通行](world.md#区域间通行的方式) —— 通路的类型与代价
+- [区域间通行的方式](world.md#区域间通行的方式) —— 通路的类型与代价
 - [封印物](sealed-object.md) —— 终末之环与前文明的遗产

@@ -409,7 +409,7 @@ function buildLinkMap(pages) {
     创造界: 'power-system.html', 原型界: 'power-system.html',
     通行方式: 'world.html#阻止区域间通行的方式', 官方叙事: 'history-official.html', 辉石经济: 'essence-economy.html',
     凝结: 'essence-economy.html', 耐受上限: 'sorcerer.html',
-    新合众国: 'federation.html', 新神: 'new-gods.html',
+    新合众国: 'federation.html', 神明: 'new-gods.html',
     // 项目独立页（术语一律指向页面自身）
     帷幕计划: 'history-official.html', 新世工程: 'new-world-project.html',
     新世: 'new-world-project.html',
