@@ -19,5 +19,5 @@ updated: 2026-09-27
 ## 相关条目
 
 - [新合众国](federation.md) —— 现世主导势力之一
-- [帷幕工程](history-official.md) —— 两套并行的历史
+- [帷幕计划](history-official.md) —— 两套并行的历史
 - [源质反应堆](reactor.md) —— 各势力逆向工程的产物

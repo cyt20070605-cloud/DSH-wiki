@@ -83,4 +83,4 @@ updated: 2026-09-27
 - [世界往复](world-cycle.md) —— 工程如何打破了本轮往复
 - [外神](outer-gods.md) —— 轮回终末：被工程篡夺权能的创世者
 - [原初律法](law.md) —— 工程要摧毁的对象
-- [帷幕工程](history-official.md) —— 另一套并行的历史机制
+- [帷幕计划](history-official.md) —— 另一套并行的历史机制

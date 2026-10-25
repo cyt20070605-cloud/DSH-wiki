@@ -92,5 +92,5 @@ updated: 2026-09-27
 - [辉石](essence-economy.md) —— 反应堆的燃料
 - [修正值](correction.md) —— 它真正在维持的东西
 - [四层世界 · 区域间通行的方式](world.md#区域间通行的方式) —— 封路即在此机制下运作
-- [帷幕工程](history-official.md) —— 以反应堆维持低源质环境的物质层手段
+- [帷幕计划](history-official.md) —— 以反应堆维持低源质环境的物质层手段
 - [时间线](timeline.md) —— 千禧陆沉与"不可逆转的倒计时"

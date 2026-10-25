@@ -53,7 +53,7 @@ updated: 2026-10-25
 | **官方叙事** | 一场**波及全球的天灾**与随之而来的**信仰崩塌** |
 | **信息形态** | **宗教与历史叙事**：有记载，但被解释为天灾与信仰崩塌 |
 
-详见 [帷幕工程](history-official.md) 的三次冲击对照。
+详见 [帷幕计划](history-official.md) 的三次冲击对照。
 
 ## 尚未展开
 
@@ -70,4 +70,4 @@ updated: 2026-10-25
 - [破碎战争](shatter-war.md) —— 第一次冲击
 - [千禧陆沉](millennium-sinking.md) —— 第三次冲击
 - [修正值](correction.md) —— 在此事件中正式跨越 0 的界限
-- [帷幕工程](history-official.md) —— 官方的解释口径
+- [帷幕计划](history-official.md) —— 官方的解释口径
