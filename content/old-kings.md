@@ -61,5 +61,5 @@ updated: 2026-09-15
 ## 相关条目
 
 - [无上意志](outer-gods.md)
-- [律法](law.md) —— 总量守恒与重组的本能
-- [时间线](timeline.md) —— 黄金年代、破碎战争、第一次冲击
+- [律法](law.md)
+- [时间线](timeline.md)

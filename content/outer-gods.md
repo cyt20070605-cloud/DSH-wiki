@@ -111,8 +111,8 @@ updated: 2026-09-15
 
 ## 相关条目
 
-- [神明](new-gods.md) —— 破碎战争后执掌律法的非凡存在（**独立条目**）
+- [神明](new-gods.md)
 - [旧王](old-kings.md)
 - [天灾](calamity.md)
-- [能力体系](power-system.md) —— 位格的四个阶段
+- [能力体系](power-system.md)
 - [时间线](timeline.md)
