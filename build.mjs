@@ -119,7 +119,6 @@ function renderInline(text, ctx) {
   //   2) 只在「不在任何 <a> 内部」的文本段里插入，避免生成嵌套链接
   //      （正文里手写的链接一律原样保留）。
   if (ctx.autolink !== false && ctx.linkMap && ctx.linked) {
-    const segments = s.split(/(<a\b[^>]*>[\s\S]*?<\/a>)/g);
     for (const [term, file] of ctx.linkMap) {
       if (term.length < 2) continue;
       if (ctx.selfFile && ctx.selfFile === file) continue;
@@ -127,6 +126,10 @@ function renderInline(text, ctx) {
       // 术语在 HTML 转义后的形态（如引号会被转成实体）
       const needle = escapeHtml(term);
       const re = new RegExp(needle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gu');
+      // 每轮重新切分：上一轮插入的 <a>…</a> 必须回到「奇数位」，
+      // 否则下一个术语会匹配进它的 href 属性里，生成嵌套的坏链接。
+      const segments = s.split(/(<a\b[^>]*>[\s\S]*?<\/a>)/g);
+      let done = false;
       for (let k = 0; k < segments.length; k++) {
         if (k % 2 === 1) continue; // 奇数位是已有的 <a>…</a>
         const m = re.exec(segments[k]);
@@ -134,10 +137,11 @@ function renderInline(text, ctx) {
         const target = `<a class="term" href="${escapeAttr(file)}">${needle}</a>`;
         segments[k] = segments[k].slice(0, m.index) + target + segments[k].slice(m.index + needle.length);
         ctx.linked.add(term);
+        done = true;
         break;
       }
+      if (done) s = segments.join('');
     }
-    s = segments.join('');
   }
 
   // 条目代码名 【xxx】
@@ -319,17 +323,17 @@ function renderMarkdown(md, file, autolink = true) {
 /* ------------------------------------------------------------------ pages */
 
 const NAV_GROUPS = [
-  { title: '总览', pages: ['index'] },
-  { title: '世界构成', pages: ['world'] },
-  { title: '核心规则', pages: ['world-cycle', 'essence', 'law', 'sorcerer', 'power-system', 'correction'] },
-  { title: '非凡物品', pages: ['sealed-object', 'end-ring', 'reactor', 'golden-tree', 'alchemy', 'essence-economy'] },
-  { title: '非凡种族', pages: ['race-human', 'race-fantasy', 'race-dragonkin'] },
-  { title: '非凡存在', pages: ['new-gods', 'old-kings', 'outer-gods', 'calamity'] },
+  { title: '总览', pages: ['首页'] },
+  { title: '世界构成', pages: ['四层世界'] },
+  { title: '核心规则', pages: ['世界往复', '源质', '律法', '术士', '力量体系', '深度体系'] },
+  { title: '非凡物品', pages: ['封印物', '终末之环', '源质反应堆', '黄金树', '炼金武装', '辉石'] },
+  { title: '非凡种族', pages: ['人类', '奇幻种', '龙裔'] },
+  { title: '非凡存在', pages: ['神明', '旧王', '外神', '天灾'] },
   { title: '势力', pages: ['ashihara', 'baghdad', 'asara', 'new-shenzhou', 'victoria', 'northern-alliance', 'faralensa', 'federation', 'european-federation'] },
   // 重大事件：按发生时间排列（旧时代末期 → 十四世纪末 → 1999 → 当代机制）
-  { title: '重要事件', pages: ['new-world-project', 'shatter-war', 'day-of-wrath', 'millennium-sinking', 'history-official'] },
-  { title: '历史', pages: ['timeline'] },
-  { title: '检索', pages: ['glossary'] },
+  { title: '重要事件', pages: ['新世工程', '破碎战争', '震怒之日', '千禧陆沉', '帷幕计划'] },
+  { title: '历史', pages: ['时间线'] },
+  { title: '检索', pages: ['术语索引'] },
 ];
 
 // 已并入其它页面的旧网址：内容页删除后仍保留一个**静默**跳转，
@@ -337,18 +341,45 @@ const NAV_GROUPS = [
 // 键 = 已退休的 slug，值 = 落点（可带 #锚点）。
 const REDIRECTS = {
   // 注：「律法熔断」一节已从术士页撤下，故不再带 #锚点（原锚点已不存在）
-  'law-meltdown': { to: 'sorcerer.html', target: '术士' },
-  'passage': { to: 'world.html#区域间通行的方式', target: '四层世界' },
-  'alchemy-arms': { to: 'alchemy.html#炼金武装', target: '炼金学' },
-  // 「遗物」改名「封印物」后旧网址的静默跳转
-  'artifact-relic': { to: 'sealed-object.html', target: '封印物' },
-  // 势力页改名后的旧网址
+  'law-meltdown': { to: '术士.html', target: '术士' },
+  'passage': { to: '四层世界.html#区域间通行的方式', target: '四层世界' },
+  'alchemy-arms': { to: '炼金武装.html#炼金武装', target: '炼金学' },
+  'artifact-relic': { to: '封印物.html', target: '封印物' },
   'middle-east': { to: 'asara.html', target: '阿萨拉' },
   'holy-faralensa': { to: 'faralensa.html', target: '法拉伦萨' },
   'sakura-empire': { to: 'ashihara.html', target: '苇原' },
   'victorian-united-kingdom': { to: 'victoria.html', target: '维多利亚' },
   'european-community': { to: 'european-federation.html', target: '欧陆联合' },
   'european-union': { to: 'european-federation.html', target: '欧陆联合' },
+  // 内容文件名由英文改为中文后，旧网址的静默跳转
+  'alchemy': { to: '炼金武装.html', target: '炼金武装' },
+  'calamity': { to: '天灾.html', target: '天灾' },
+  'correction': { to: '深度体系.html', target: '深度体系' },
+  'day-of-wrath': { to: '震怒之日.html', target: '震怒之日' },
+  'end-ring': { to: '终末之环.html', target: '终末之环' },
+  'essence': { to: '源质.html', target: '源质' },
+  'essence-economy': { to: '辉石.html', target: '辉石' },
+  'glossary': { to: '术语索引.html', target: '术语索引' },
+  'golden-tree': { to: '黄金树.html', target: '黄金树' },
+  'history-official': { to: '帷幕计划.html', target: '帷幕计划' },
+  'index': { to: '首页.html', target: '首页' },
+  'law': { to: '律法.html', target: '律法' },
+  'millennium-sinking': { to: '千禧陆沉.html', target: '千禧陆沉' },
+  'new-gods': { to: '神明.html', target: '神明' },
+  'new-world-project': { to: '新世工程.html', target: '新世工程' },
+  'old-kings': { to: '旧王.html', target: '旧王' },
+  'outer-gods': { to: '外神.html', target: '外神' },
+  'power-system': { to: '力量体系.html', target: '力量体系' },
+  'race-dragonkin': { to: '龙裔.html', target: '龙裔' },
+  'race-fantasy': { to: '奇幻种.html', target: '奇幻种' },
+  'race-human': { to: '人类.html', target: '人类' },
+  'reactor': { to: '源质反应堆.html', target: '源质反应堆' },
+  'sealed-object': { to: '封印物.html', target: '封印物' },
+  'shatter-war': { to: '破碎战争.html', target: '破碎战争' },
+  'sorcerer': { to: '术士.html', target: '术士' },
+  'timeline': { to: '时间线.html', target: '时间线' },
+  'world': { to: '四层世界.html', target: '四层世界' },
+  'world-cycle': { to: '世界往复.html', target: '世界往复' },
 };
 
 function loadContent() {
@@ -392,32 +423,32 @@ function buildLinkMap(pages) {
   // 精确名词优先：代码名【】内的词优先绑定到其所属条目
   const priority = ['原初律法', '律法', '无上意志', '修正值', '炼金武装', '封印物', '灰潮使徒', '灰潮构造体', '终末之环', '世界引擎', '先锋守望', '帷幕计划', '千年协定', '帝国轴心', '绛天之龙', '铸形之炎', '伏行之恶', '轮回终末', '百相熔炉', '永世集团', '黄金黎明', '世外天国', '辉石', '亚龙', '四界', '新世工程', '新世', '破碎战争', '第一次冲击', '震怒之日', '第二次冲击', '千禧陆沉', '第三次冲击', '维多利亚', '法拉伦萨', '欧陆联合', '北方同盟', '新合众国', '新神州', '巴格达', '阿萨拉', '苇原', '金色裂痕', '黄金树'];
   const owner = {
-    原初律法: 'law.html', 无上意志: 'outer-gods.html', 修正值: 'correction.html', 炼金武装: 'alchemy.html#炼金武装',
-    封印物: 'sealed-object.html', 灰潮使徒: 'calamity.html', 灰潮构造体: 'calamity.html', 终末之环: 'sealed-object.html', 世界引擎: 'timeline.html',
-    先锋守望: 'timeline.html', 帷幕计划: 'timeline.html', 千年协定: 'timeline.html', 帝国轴心: 'timeline.html',
-    绛天之龙: 'outer-gods.html', 铸形之炎: 'outer-gods.html', 伏行之恶: 'outer-gods.html', 轮回终末: 'outer-gods.html',
-    百相熔炉: 'old-kings.html', 永世集团: 'old-kings.html', 黄金黎明: 'old-kings.html', 世外天国: 'old-kings.html',
-    辉石: 'essence.html', 亚龙: 'calamity.html',
+    原初律法: '律法.html', 无上意志: '外神.html', 修正值: '深度体系.html', 炼金武装: '炼金武装.html#炼金武装',
+    封印物: '封印物.html', 灰潮使徒: '天灾.html', 灰潮构造体: '天灾.html', 终末之环: '封印物.html', 世界引擎: '时间线.html',
+    先锋守望: '时间线.html', 帷幕计划: '时间线.html', 千年协定: '时间线.html', 帝国轴心: '时间线.html',
+    绛天之龙: '外神.html', 铸形之炎: '外神.html', 伏行之恶: '外神.html', 轮回终末: '外神.html',
+    百相熔炉: '旧王.html', 永世集团: '旧王.html', 黄金黎明: '旧王.html', 世外天国: '旧王.html',
+    辉石: '源质.html', 亚龙: '天灾.html',
     // 裁决后新增条目
-    环阶: 'power-system.html', 源质抗性: 'sorcerer.html',
-    四界: 'power-system.html', 物质界: 'power-system.html', 形成界: 'power-system.html',
-    创造界: 'power-system.html', 原型界: 'power-system.html',
-    通行方式: 'world.html#阻止区域间通行的方式', 官方叙事: 'history-official.html', 辉石经济: 'essence-economy.html',
-    凝结: 'essence-economy.html', 耐受上限: 'sorcerer.html',
-    新合众国: 'federation.html', 神明: 'new-gods.html', 律法: 'law.html',
+    环阶: '力量体系.html', 源质抗性: '术士.html',
+    四界: '力量体系.html', 物质界: '力量体系.html', 形成界: '力量体系.html',
+    创造界: '力量体系.html', 原型界: '力量体系.html',
+    通行方式: '四层世界.html#阻止区域间通行的方式', 官方叙事: '帷幕计划.html', 辉石经济: '辉石.html',
+    凝结: '辉石.html', 耐受上限: '术士.html',
+    新合众国: 'federation.html', 神明: '神明.html', 律法: '律法.html',
     // 项目独立页（术语一律指向页面自身）
-    帷幕计划: 'history-official.html', 新世工程: 'new-world-project.html',
-    新世: 'new-world-project.html',
+    帷幕计划: '帷幕计划.html', 新世工程: '新世工程.html',
+    新世: '新世工程.html',
     // 重大事件页
-    破碎战争: 'shatter-war.html', 第一次冲击: 'shatter-war.html',
-    震怒之日: 'day-of-wrath.html', 第二次冲击: 'day-of-wrath.html',
-    千禧陆沉: 'millennium-sinking.html', 第三次冲击: 'millennium-sinking.html',
+    破碎战争: '破碎战争.html', 第一次冲击: '破碎战争.html',
+    震怒之日: '震怒之日.html', 第二次冲击: '震怒之日.html',
+    千禧陆沉: '千禧陆沉.html', 第三次冲击: '千禧陆沉.html',
     // 势力页（各页术语一律指向页面自身）
     维多利亚: 'victoria.html', 法拉伦萨: 'faralensa.html',
     欧陆联合: 'european-federation.html', 北方同盟: 'northern-alliance.html',
     新神州: 'new-shenzhou.html', 巴格达: 'baghdad.html', 阿萨拉: 'asara.html', 苇原: 'ashihara.html',
     // 非凡物品页（封印物 与 其子页 终末之环）
-    黄金树: 'golden-tree.html', 金色裂痕: 'golden-tree.html',
+    黄金树: '黄金树.html', 金色裂痕: '黄金树.html',
   };
   for (const t of priority) if (owner[t]) map.set(t, owner[t]);
   return map;
@@ -481,7 +512,7 @@ function pageShell({ pages, page, content, toc, prev, next }) {
   const groupTitle = (groups.find((g) => g.items.some((p) => p.key === page.key)) || {}).title || '';
 
   const crumbs = [
-    `<a href="index.html">${escapeHtml(SITE_TITLE)}</a>`,
+    `<a href="首页.html">${escapeHtml(SITE_TITLE)}</a>`,
     groupTitle ? `<span class="sep">/</span><span>${escapeHtml(groupTitle)}</span>` : '',
     page.category && page.category !== groupTitle ? `<span class="sep">/</span><span>${escapeHtml(page.category)}</span>` : '',
   ].join('');
@@ -524,7 +555,7 @@ function pageShell({ pages, page, content, toc, prev, next }) {
 
 <header class="topbar">
   <button class="burger" id="nav-open" type="button" aria-label="打开目录" aria-expanded="false">☰</button>
-  <a class="brand" href="index.html">
+  <a class="brand" href="首页.html">
     <span class="brand-mark" aria-hidden="true">源</span>
     <span class="brand-body">
       <span class="brand-main">${escapeHtml(SITE_TITLE)}</span>
@@ -659,7 +690,7 @@ function build() {
   const totalChars = [...pages.values()].reduce((n, p) => n + p.body.length, 0);
   console.log(`✓ 构建完成：${pages.size} 个页面 → ${path.relative(ROOT, OUT_DIR)}/`);
   console.log(`  正文合计 ${totalChars} 字符，检索索引 ${searchIndex.length} 条`);
-  console.log(`  打开：${path.join(OUT_DIR, 'index.html')}`);
+  console.log(`  打开：${path.join(OUT_DIR, '首页.html')}`);
 }
 
 /* ------------------------------------------------------------------- serve */
@@ -675,7 +706,7 @@ function serve(port) {
   };
   const server = http.createServer((req, res) => {
     const urlPath = decodeURIComponent((req.url || '/').split('?')[0]);
-    const rel = urlPath === '/' ? 'index.html' : urlPath.replace(/^\/+/, '');
+    const rel = urlPath === '/' ? '首页.html' : urlPath.replace(/^\/+/, '');
     const target = path.join(OUT_DIR, rel);
     if (!target.startsWith(OUT_DIR)) {
       res.writeHead(403).end('forbidden');
