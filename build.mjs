@@ -266,26 +266,21 @@ function renderMarkdown(md, file, autolink = true) {
         items.push({ indent, content });
         i++;
       }
-      // 简化处理：按缩进分一层嵌套
-      let html = '<ul>';
-      let depth = items[0]?.indent ?? 0;
+      // 按缩进构建嵌套列表：子列表嵌在父项 <li> 内，避免 <ul> 直接套 <ul>（非法标记）
+      const root = { indent: -1, children: [] };
+      const stack = [root];
       for (const it of items) {
-        if (it.indent > depth) {
-          html += '<ul>';
-          depth = it.indent;
-        } else if (it.indent < depth) {
-          html += '</ul>';
-          depth = it.indent;
-        }
+        while (stack.length > 1 && it.indent <= stack[stack.length - 1].indent) stack.pop();
+        const node = { indent: it.indent, content: renderInline(it.content, ctx), children: [] };
+        stack[stack.length - 1].children.push(node);
+        stack.push(node);
         plainLines.push(stripMd(it.content));
-        html += `<li>${renderInline(it.content, ctx)}</li>`;
       }
-      while (depth > (items[0]?.indent ?? 0)) {
-        html += '</ul>';
-        depth -= 2;
-      }
-      html += '</ul>';
-      out.push(html);
+      const renderList = (nodes) =>
+        `<ul>${nodes
+          .map((n) => `<li>${n.content}${n.children.length ? renderList(n.children) : ''}</li>`)
+          .join('')}</ul>`;
+      out.push(renderList(root.children));
       continue;
     }
 
