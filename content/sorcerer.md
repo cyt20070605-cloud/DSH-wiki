@@ -68,4 +68,4 @@ updated: 2026-09-27
 - [旧王](old-kings.md) —— 加冕于死去世界的古老王者
 - [外神](outer-gods.md) —— 诞生于群星深处的至高神性
 - [炼金武装](alchemy.md#炼金武装) —— 仅适合术士使用的武器（门槛是身体机能与精神）
-- [天灾 · 恶魔](calamity.md) —— 术士可炼制 DEVIL TRIGGER 作为恶魔容器，融合后成为魔人
+- [天灾 · 神孽](calamity.md) —— 术士可炼制 DEVIL TRIGGER 作为神孽容器，融合后成为魔人
