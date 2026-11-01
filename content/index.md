@@ -15,7 +15,7 @@ updated: 2026-10-03
 
 3. **[律法](law.md)**
 
-4. **[修正值](correction.md)**
+4. **[深度](correction.md)**
 
 5. **[术士](sorcerer.md)**
 
@@ -32,7 +32,7 @@ updated: 2026-10-03
 | 中层 | 边境 | 无序 | 边缘世界；现世与旧域间的缓冲区域，不被现世接纳者汇聚 |
 | 底层 | 旧域 | 混沌 | 终焉之地；所有混乱与纷争的发源地，一切死去世界的归宿 |
 
-四层之间并非静态：[修正值](correction.md) 的波动会让区域的形态发生转化。
+四层之间并非静态：[深度](correction.md) 的波动会让区域的形态发生转化。
 
 ## 能量与规则的双层结构
 
@@ -43,7 +43,7 @@ updated: 2026-10-03
 | 能量 | [源质](essence.md) | 来自高维的纯粹能量，具有扭曲现实的功效 |
 | 能量凝结 | [辉石](essence-economy.md) | 源质与物质在极端环境下融合形成的特殊矿物，按内部源质浓度散发明暗不一的光芒 |
 | 规则 | [律法](law.md) | **调用源质扭曲现实的权限**，一切非凡特性的根源 |
-| 度量 | [修正值](correction.md) | 衡量区域内源质扭曲程度的唯一标准，以零为分界线 |
+| 度量 | [深度体系](correction.md) | 区域看**深度**、个体看**修正值**；同一把尺，以零为界 |
 
 ## 力量体系
 
@@ -63,7 +63,7 @@ updated: 2026-10-03
 |---|---|
 | **总览** | [首页](index.md) |
 | **世界构成** | [四层世界](world.md) —— 群星 / 现世 / 边境 / 旧域 |
-| **核心规则** | [纪元](world-cycle.md)（世界往复与时间尺度）· [源质](essence.md) · [律法](law.md) · [术士](sorcerer.md) · [能力体系](power-system.md)（位格的四个阶段）· [修正值](correction.md) |
+| **核心规则** | [纪元](world-cycle.md)（世界往复与时间尺度）· [源质](essence.md) · [律法](law.md) · [术士](sorcerer.md) · [能力体系](power-system.md)（位格的四个阶段）· [深度](correction.md) |
 | **封印物** | [封印物](sealed-object.md) · [源质反应堆](reactor.md) · [炼金武装](alchemy.md)（含炼金学）· [辉石](essence-economy.md) |
 | **非凡种族** | [人类](race-human.md) · [奇幻种](race-fantasy.md) · [龙裔](race-dragonkin.md) |
 | **非凡存在** | [神明](new-gods.md) · [旧王](old-kings.md) · [外神](outer-gods.md) · [天灾](calamity.md) |
@@ -74,8 +74,8 @@ updated: 2026-10-03
 
 ## 主题索引
 
-- **世界层级**：从 [四层世界](world.md) 开始，再读 [源质](essence.md) 与 [修正值](correction.md)。
-- **规则机制**：核心规则——[纪元](world-cycle.md)（最底层的时间尺度）、[源质](essence.md)、[律法](law.md)、[术士](sorcerer.md)、[能力体系](power-system.md)（术士的四个阶段）、[修正值](correction.md)。
+- **世界层级**：从 [四层世界](world.md) 开始，再读 [源质](essence.md) 与 [深度](correction.md)。
+- **规则机制**：核心规则——[纪元](world-cycle.md)（最底层的时间尺度）、[源质](essence.md)、[律法](law.md)、[术士](sorcerer.md)、[能力体系](power-system.md)（术士的四个阶段）、[深度](correction.md)。
 - **各方势力**：[神明](new-gods.md)、[外神](outer-gods.md)、[旧王](old-kings.md)、[天灾](calamity.md)；现世各国见 [势力](federation.md) 栏。
 - **重大事件**：[新世工程](new-world-project.md)（前文明）· [破碎战争](shatter-war.md)（第一次冲击）· [震怒之日](day-of-wrath.md)（第二次冲击）· [千禧陆沉](millennium-sinking.md)（第三次冲击）· [帷幕计划](history-official.md)（当代）· [源质反应堆](reactor.md)（现世的续命手段）。
 - **按名词查证**：[术语索引](glossary.md) 提供正名／别名对照。
