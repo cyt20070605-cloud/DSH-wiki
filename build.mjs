@@ -329,7 +329,7 @@ const NAV_GROUPS = [
   { title: '非凡物品', pages: ['封印物', '终末之环', '源质反应堆', '黄金树', '炼金武装', '辉石'] },
   { title: '非凡种族', pages: ['人类', '奇幻种', '龙裔'] },
   { title: '非凡存在', pages: ['神明', '旧王', '外神', '天灾'] },
-  { title: '势力', pages: ['ashihara', 'baghdad', 'asara', 'new-shenzhou', 'victoria', 'northern-alliance', 'faralensa', 'federation', 'european-federation'] },
+  { title: '势力', pages: ['ashihara', 'new-shenzhou', 'victoria', 'northern-alliance', 'faralensa', 'federation', 'european-federation'] },
   // 重大事件：按发生时间排列（旧时代末期 → 十四世纪末 → 1999 → 当代机制）
   { title: '重要事件', pages: ['新世工程', '破碎战争', '震怒之日', '千禧陆沉', '帷幕计划'] },
   { title: '历史', pages: ['时间线'] },
@@ -345,7 +345,6 @@ const REDIRECTS = {
   'passage': { to: '四层世界.html#区域间通行的方式', target: '四层世界' },
   'alchemy-arms': { to: '炼金武装.html#炼金武装', target: '炼金学' },
   'artifact-relic': { to: '封印物.html', target: '封印物' },
-  'middle-east': { to: 'asara.html', target: '阿萨拉' },
   'holy-faralensa': { to: 'faralensa.html', target: '法拉伦萨' },
   'sakura-empire': { to: 'ashihara.html', target: '苇原' },
   'victorian-united-kingdom': { to: 'victoria.html', target: '维多利亚' },
@@ -421,7 +420,7 @@ function buildLinkMap(pages) {
     for (const kw of p.keywords) if (kw && kw.length >= 2) map.set(kw, p.file);
   }
   // 精确名词优先：代码名【】内的词优先绑定到其所属条目
-  const priority = ['原初律法', '律法', '无上意志', '修正值', '炼金武装', '封印物', '灰潮使徒', '灰潮构造体', '终末之环', '世界引擎', '先锋守望', '帷幕计划', '千年协定', '帝国轴心', '绛天之龙', '铸形之炎', '伏行之恶', '轮回终末', '百相熔炉', '永世集团', '黄金黎明', '世外天国', '辉石', '亚龙', '四界', '位阶', '新世工程', '新世', '破碎战争', '第一次冲击', '震怒之日', '第二次冲击', '千禧陆沉', '第三次冲击', '维多利亚', '法拉伦萨', '欧陆联合', '北方同盟', '新合众国', '新神州', '巴格达', '阿萨拉', '苇原', '金色裂痕', '黄金树'];
+  const priority = ['原初律法', '律法', '无上意志', '修正值', '炼金武装', '封印物', '灰潮使徒', '灰潮构造体', '终末之环', '世界引擎', '先锋守望', '帷幕计划', '千年协定', '帝国轴心', '绛天之龙', '铸形之炎', '伏行之恶', '轮回终末', '百相熔炉', '永世集团', '黄金黎明', '世外天国', '辉石', '亚龙', '四界', '位阶', '新世工程', '新世', '破碎战争', '第一次冲击', '震怒之日', '第二次冲击', '千禧陆沉', '第三次冲击', '维多利亚', '法拉伦萨', '欧陆联合', '北方同盟', '新合众国', '新神州', '苇原', '金色裂痕', '黄金树'];
   const owner = {
     原初律法: '律法.html', 无上意志: '外神.html', 修正值: '深度体系.html', 炼金武装: '炼金武装.html#炼金武装',
     封印物: '封印物.html', 灰潮使徒: '天灾.html', 灰潮构造体: '天灾.html', 终末之环: '封印物.html', 世界引擎: '时间线.html',
@@ -446,7 +445,7 @@ function buildLinkMap(pages) {
     // 势力页（各页术语一律指向页面自身）
     维多利亚: 'victoria.html', 法拉伦萨: 'faralensa.html',
     欧陆联合: 'european-federation.html', 北方同盟: 'northern-alliance.html',
-    新神州: 'new-shenzhou.html', 巴格达: 'baghdad.html', 阿萨拉: 'asara.html', 苇原: 'ashihara.html',
+    新神州: 'new-shenzhou.html', 苇原: 'ashihara.html',
     // 非凡物品页（封印物 与 其子页 终末之环）
     黄金树: '黄金树.html', 金色裂痕: '黄金树.html',
   };
