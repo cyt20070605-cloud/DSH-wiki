@@ -105,7 +105,18 @@
             li.style.display = match ? '' : 'none';
             if (match) hit++;
           });
-          g.style.display = hit || !kw ? '' : 'none';
+          // 子栏目：先按自身条目的可见性收起，再统计剩余可见条目
+          var subs = [].slice.call(g.querySelectorAll('.nav-subgroup'));
+          subs.forEach(function (sg) {
+            var visible = [].slice.call(sg.querySelectorAll('.nav-list li')).some(function (li) {
+              return li.style.display !== 'none';
+            });
+            sg.style.display = visible ? '' : 'none';
+          });
+          var total = [].slice.call(g.querySelectorAll('.nav-list li')).filter(function (li) {
+            return li.style.display !== 'none';
+          }).length;
+          g.style.display = total || !kw ? '' : 'none';
           if (kw) g.removeAttribute('data-collapsed');
           else if (collapsed[g.getAttribute('data-group') || '']) g.setAttribute('data-collapsed', '1');
           hitTotal += hit;

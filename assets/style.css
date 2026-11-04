@@ -431,9 +431,32 @@ html[data-theme="dark"] .icon-btn .i-sun { display: none; }
   opacity: .8;
 }
 .nav-group[data-collapsed="1"] .nav-head .caret { transform: rotate(-90deg); }
-.nav-group[data-collapsed="1"] .nav-list { display: none; }
+.nav-group[data-collapsed="1"] .nav-body { display: none; }
 
 .nav-list { list-style: none; margin: 2px 0 0; padding: 0; }
+
+/* 子栏目：比一级栏目低一格的小标题 + 同级条目 */
+.nav-subgroup { margin-top: 6px; }
+.nav-subhead {
+  margin: 0;
+  padding: 5px 6px 4px 22px;
+  position: relative;
+  color: var(--fg-dim);
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .1em;
+}
+.nav-subhead::before {
+  content: "";
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  width: 5px;
+  height: 1px;
+  background: var(--line);
+}
+.nav-subgroup .nav-list a { padding-left: 22px; }
 
 .nav-list a {
   display: flex;

@@ -68,7 +68,7 @@ wiki/
 
 > **页面 URL 跟着文件名走**：`content/术士.md` 构建出来就是 `site/术士.html`。旧英文文件名（`sorcerer.html` 等）由 `build.mjs` 的 `REDIRECTS` 生成静默跳转壳，旧书签不会 404。
 
-> **共 41 篇。**（上面只列了主要条目，完整清单见 `content/`。）新增 `content/*.md` 后，还需在 `build.mjs` 的 `NAV_GROUPS` 里登记文件名，否则不会出现在侧边栏。
+> **共 42 篇。**（上面只列了主要条目，完整清单见 `content/`。）新增 `content/*.md` 后，还需在 `build.mjs` 的 `NAV_GROUPS` 里登记文件名，否则不会出现在侧边栏。栏目下可再加子栏目：给该栏目的对象加 `groups: [{ title, pages }]`，侧边栏、面包屑与翻页顺序会一并对齐。
 
 ## 改内容
 

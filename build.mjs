@@ -323,6 +323,7 @@ function renderMarkdown(md, file, autolink = true) {
 /* ------------------------------------------------------------------ pages */
 
 // 各栏目内条目一律按「标题字数从少到多」排列；字数相同时保持此处的书写顺序。
+// 栏目下的 groups 是子栏目：标题 + 条目，子栏目内同样按字数排。
 const NAV_GROUPS = [
   { title: '总览', pages: ['首页'] },
   { title: '世界构成', pages: ['四层世界'] },
@@ -330,7 +331,14 @@ const NAV_GROUPS = [
   { title: '非凡物品', pages: ['辉石', '封印物', '黄金树', '终末之环', '炼金武装', '源质反应堆'] },
   { title: '非凡种族', pages: ['人类', '龙裔', '奇幻种'] },
   { title: '非凡存在', pages: ['神明', '旧王', '外神', '天灾'] },
-  { title: '现世诸国', pages: ['苇原', '新神州', '巴比伦', '底比斯', '新联邦', '维多利亚', '北方同盟', '法拉伦萨', '伊塔利亚', '莱茵联邦', '罗穆路斯', '欧洲共同体', '塞纳共和国'] },
+  {
+    title: '现世诸国',
+    pages: ['苇原', '新神州', '新联邦', '维多利亚', '北方同盟', '法拉伦萨', '伊塔利亚', '莱茵联邦', '欧洲共同体', '塞纳共和国'],
+    groups: [
+      // 文明古国：按标题字数排 → 三个两字国在前（保持书写顺序），四字的罗穆路斯在后
+      { title: '文明古国', pages: ['巴比伦', '底比斯', '旧神州', '罗穆路斯'] },
+    ],
+  },
   { title: '重要事件', pages: ['新世工程', '破碎战争', '震怒之日', '千禧陆沉', '帷幕计划'] },
   { title: '历史', pages: ['时间线'] },
   { title: '检索', pages: ['术语索引'] },
@@ -463,41 +471,61 @@ function buildLinkMap(pages) {
   return map;
 }
 
-/** 侧栏分组（NAV_GROUPS 顺序 + 未被收录的页面兜到「其它」） */
+/** 侧栏分组（NAV_GROUPS 顺序 + 未被收录的页面兜到「其它」）
+ *  每个分组可带子栏目 sub：{ title, items }[]，子栏目排在直属条目之后。 */
 function groupPages(pages) {
   const groups = [];
   const placed = new Set();
   for (const g of NAV_GROUPS) {
     const items = g.pages.map((k) => pages.get(k)).filter(Boolean);
-    if (!items.length) continue;
+    const subs = (g.groups || [])
+      .map((s) => {
+        const sItems = s.pages.map((k) => pages.get(k)).filter(Boolean);
+        sItems.forEach((p) => placed.add(p.key));
+        return { title: s.title, items: sItems };
+      })
+      .filter((s) => s.items.length);
+    if (!items.length && !subs.length) continue;
     items.forEach((p) => placed.add(p.key));
-    groups.push({ title: g.title, items });
+    groups.push({ title: g.title, items, subs });
   }
   const rest = [...pages.values()].filter((p) => !placed.has(p.key));
-  if (rest.length) groups.push({ title: '其它', items: rest });
+  if (rest.length) groups.push({ title: '其它', items: rest, subs: [] });
   return groups;
 }
 
-/** 阅读顺序（上一页 / 下一页用） */
+/** 阅读顺序（上一页 / 下一页用）：分组 → 直属条目 → 各子栏目条目 */
 function orderedPages(pages) {
-  return groupPages(pages).flatMap((g) => g.items);
+  return groupPages(pages).flatMap((g) => [...g.items, ...g.subs.flatMap((s) => s.items)]);
 }
 
 function renderSidebar(groups, currentKey) {
+  const linkOf = (p) => {
+    const active = p.key === currentKey ? ' class="active" aria-current="page"' : '';
+    const sub = p.summary ? `<span class="nav-sub">${escapeHtml(p.summary)}</span>` : '';
+    return `<li><a href="${escapeAttr(p.file)}"${active}><span class="nav-title">${escapeHtml(p.title)}</span>${sub}</a></li>`;
+  };
   const sections = groups
     .map((g) => {
-      const links = g.items
-        .map((p) => {
-          const active = p.key === currentKey ? ' class="active" aria-current="page"' : '';
-          const sub = p.summary ? `<span class="nav-sub">${escapeHtml(p.summary)}</span>` : '';
-          return `<li><a href="${escapeAttr(p.file)}"${active}><span class="nav-title">${escapeHtml(p.title)}</span>${sub}</a></li>`;
-        })
+      const links = g.items.map(linkOf).join('\n          ');
+      const subs = (g.subs || [])
+        .map(
+          (s) => `<div class="nav-subgroup" data-subgroup="${escapeAttr(s.title)}">
+            <p class="nav-subhead">${escapeHtml(s.title)}</p>
+            <ul class="nav-list">
+          ${s.items.map(linkOf).join('\n          ')}
+            </ul>
+          </div>`
+        )
         .join('\n          ');
       return `      <section class="nav-group" data-group="${escapeAttr(g.title)}">
         <button class="nav-head" type="button" aria-expanded="true"><span>${escapeHtml(g.title)}</span><span class="caret" aria-hidden="true">▾</span></button>
+        <div class="nav-body">
         <ul class="nav-list">
           ${links}
         </ul>
+          ${subs}
+        </div>
       </section>`;
     })
     .join('\n');
@@ -518,12 +546,24 @@ const ICON_MOON = `<svg class="i-moon" width="17" height="17" viewBox="0 0 24 24
 function pageShell({ pages, page, content, toc, prev, next }) {
   const groups = groupPages(pages);
   const nav = renderSidebar(groups, page.key);
-  const groupTitle = (groups.find((g) => g.items.some((p) => p.key === page.key)) || {}).title || '';
+  // 所属一级栏目（直属条目或子栏目条目都算）
+  const groupTitle =
+    (groups.find(
+      (g) => g.items.some((p) => p.key === page.key) || (g.subs || []).some((s) => s.items.some((p) => p.key === page.key))
+    ) || {}).title || '';
+  // 子栏目名（若该页属于某个子栏目），用于面包屑
+  const subTitle =
+    (groups
+      .flatMap((g) => g.subs || [])
+      .find((s) => s.items.some((p) => p.key === page.key)) || {}).title || '';
 
   const crumbs = [
     `<a href="首页.html">${escapeHtml(SITE_TITLE)}</a>`,
     groupTitle ? `<span class="sep">/</span><span>${escapeHtml(groupTitle)}</span>` : '',
-    page.category && page.category !== groupTitle ? `<span class="sep">/</span><span>${escapeHtml(page.category)}</span>` : '',
+    subTitle ? `<span class="sep">/</span><span>${escapeHtml(subTitle)}</span>` : '',
+    page.category && page.category !== groupTitle && page.category !== subTitle
+      ? `<span class="sep">/</span><span>${escapeHtml(page.category)}</span>`
+      : '',
   ].join('');
 
   const tocHtml = toc.length
