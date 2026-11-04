@@ -322,15 +322,15 @@ function renderMarkdown(md, file, autolink = true) {
 
 /* ------------------------------------------------------------------ pages */
 
+// 各栏目内条目一律按「标题字数从少到多」排列；字数相同时保持此处的书写顺序。
 const NAV_GROUPS = [
   { title: '总览', pages: ['首页'] },
   { title: '世界构成', pages: ['四层世界'] },
-  { title: '核心规则', pages: ['世界往复', '源质', '律法', '术士', '力量体系', '深度体系'] },
-  { title: '非凡物品', pages: ['封印物', '终末之环', '源质反应堆', '黄金树', '炼金武装', '辉石'] },
-  { title: '非凡种族', pages: ['人类', '奇幻种', '龙裔'] },
+  { title: '核心规则', pages: ['源质', '律法', '术士', '世界往复', '力量体系', '深度体系'] },
+  { title: '非凡物品', pages: ['辉石', '封印物', '黄金树', '终末之环', '炼金武装', '源质反应堆'] },
+  { title: '非凡种族', pages: ['人类', '龙裔', '奇幻种'] },
   { title: '非凡存在', pages: ['神明', '旧王', '外神', '天灾'] },
-  { title: '势力', pages: ['ashihara', 'new-shenzhou', 'victoria', 'northern-alliance', 'faralensa', 'federation', 'european-federation'] },
-  // 重大事件：按发生时间排列（旧时代末期 → 十四世纪末 → 1999 → 当代机制）
+  { title: '势力', pages: ['苇原', '新神州', '新联邦', '维多利亚', '北方同盟', '法拉伦萨', '伊塔利亚', '莱茵联邦', '欧洲共同体', '塞纳共和国'] },
   { title: '重要事件', pages: ['新世工程', '破碎战争', '震怒之日', '千禧陆沉', '帷幕计划'] },
   { title: '历史', pages: ['时间线'] },
   { title: '检索', pages: ['术语索引'] },
@@ -345,11 +345,19 @@ const REDIRECTS = {
   'passage': { to: '四层世界.html#区域间通行的方式', target: '四层世界' },
   'alchemy-arms': { to: '炼金武装.html#炼金武装', target: '炼金学' },
   'artifact-relic': { to: '封印物.html', target: '封印物' },
-  'holy-faralensa': { to: 'faralensa.html', target: '法拉伦萨' },
-  'sakura-empire': { to: 'ashihara.html', target: '苇原' },
-  'victorian-united-kingdom': { to: 'victoria.html', target: '维多利亚' },
-  'european-community': { to: 'european-federation.html', target: '欧陆联合' },
-  'european-union': { to: 'european-federation.html', target: '欧陆联合' },
+  'holy-faralensa': { to: '法拉伦萨.html', target: '法拉伦萨' },
+  'sakura-empire': { to: '苇原.html', target: '苇原' },
+  'victorian-united-kingdom': { to: '维多利亚.html', target: '维多利亚' },
+  'european-community': { to: '欧洲共同体.html', target: '欧洲共同体' },
+  'european-union': { to: '欧洲共同体.html', target: '欧洲共同体' },
+  // 势力页文件名由英文改为中文后，旧网址的静默跳转
+  'federation': { to: '新联邦.html', target: '新联邦' },
+  'european-federation': { to: '欧洲共同体.html', target: '欧洲共同体' },
+  'victoria': { to: '维多利亚.html', target: '维多利亚' },
+  'northern-alliance': { to: '北方同盟.html', target: '北方同盟' },
+  'faralensa': { to: '法拉伦萨.html', target: '法拉伦萨' },
+  'ashihara': { to: '苇原.html', target: '苇原' },
+  'new-shenzhou': { to: '新神州.html', target: '新神州' },
   // 内容文件名由英文改为中文后，旧网址的静默跳转
   'alchemy': { to: '炼金武装.html', target: '炼金武装' },
   'calamity': { to: '天灾.html', target: '天灾' },
@@ -420,7 +428,7 @@ function buildLinkMap(pages) {
     for (const kw of p.keywords) if (kw && kw.length >= 2) map.set(kw, p.file);
   }
   // 精确名词优先：代码名【】内的词优先绑定到其所属条目
-  const priority = ['原初律法', '律法', '无上意志', '修正值', '炼金武装', '封印物', '灰潮使徒', '灰潮构造体', '终末之环', '世界引擎', '先锋守望', '帷幕计划', '千年协定', '帝国轴心', '绛天之龙', '铸形之炎', '伏行之恶', '轮回终末', '百相熔炉', '永世集团', '黄金黎明', '世外天国', '辉石', '亚龙', '四界', '位阶', '新世工程', '新世', '破碎战争', '第一次冲击', '震怒之日', '第二次冲击', '千禧陆沉', '第三次冲击', '维多利亚', '法拉伦萨', '欧陆联合', '北方同盟', '新合众国', '新神州', '苇原', '金色裂痕', '黄金树'];
+  const priority = ['原初律法', '律法', '无上意志', '修正值', '炼金武装', '封印物', '灰潮使徒', '灰潮构造体', '终末之环', '世界引擎', '先锋守望', '帷幕计划', '千年协定', '帝国轴心', '绛天之龙', '铸形之炎', '伏行之恶', '轮回终末', '百相熔炉', '永世集团', '黄金黎明', '世外天国', '辉石', '亚龙', '四界', '位阶', '新世工程', '新世', '破碎战争', '第一次冲击', '震怒之日', '第二次冲击', '千禧陆沉', '第三次冲击', '维多利亚', '法拉伦萨', '欧洲共同体', '北方同盟', '新联邦', '新神州', '苇原', '伊塔利亚', '莱茵联邦', '塞纳共和国', '金色裂痕', '黄金树'];
   const owner = {
     原初律法: '律法.html', 无上意志: '外神.html', 修正值: '深度体系.html', 炼金武装: '炼金武装.html#炼金武装',
     封印物: '封印物.html', 灰潮使徒: '天灾.html', 灰潮构造体: '天灾.html', 终末之环: '封印物.html', 世界引擎: '时间线.html',
@@ -434,7 +442,7 @@ function buildLinkMap(pages) {
     创造界: '力量体系.html', 原型界: '力量体系.html',
     通行方式: '四层世界.html#阻止区域间通行的方式', 官方叙事: '帷幕计划.html', 辉石经济: '辉石.html',
     凝结: '辉石.html', 耐受上限: '术士.html',
-    新合众国: 'federation.html', 神明: '神明.html', 律法: '律法.html',
+    新联邦: '新联邦.html', 神明: '神明.html', 律法: '律法.html',
     // 项目独立页（术语一律指向页面自身）
     帷幕计划: '帷幕计划.html', 新世工程: '新世工程.html',
     新世: '新世工程.html',
@@ -443,9 +451,10 @@ function buildLinkMap(pages) {
     震怒之日: '震怒之日.html', 第二次冲击: '震怒之日.html',
     千禧陆沉: '千禧陆沉.html', 第三次冲击: '千禧陆沉.html',
     // 势力页（各页术语一律指向页面自身）
-    维多利亚: 'victoria.html', 法拉伦萨: 'faralensa.html',
-    欧陆联合: 'european-federation.html', 北方同盟: 'northern-alliance.html',
-    新神州: 'new-shenzhou.html', 苇原: 'ashihara.html',
+    维多利亚: '维多利亚.html', 法拉伦萨: '法拉伦萨.html',
+    欧洲共同体: '欧洲共同体.html', 北方同盟: '北方同盟.html',
+    新神州: '新神州.html', 苇原: '苇原.html',
+    伊塔利亚: '伊塔利亚.html', 莱茵联邦: '莱茵联邦.html', 塞纳共和国: '塞纳共和国.html',
     // 非凡物品页（封印物 与 其子页 终末之环）
     黄金树: '黄金树.html', 金色裂痕: '黄金树.html',
   };
