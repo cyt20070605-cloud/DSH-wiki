@@ -328,8 +328,15 @@ const NAV_GROUPS = [
   { title: '总览', pages: ['首页'] },
   { title: '世界构成', pages: ['四层世界'] },
   { title: '核心规则', pages: ['源质', '律法', '术士', '世界往复', '力量体系', '深度体系'] },
-  { title: '非凡物品', pages: ['辉石', '封印物', '黄金树', '终末之环', '炼金武装', '源质反应核心'] },
-  { title: '非凡种族', pages: ['人类', '龙裔', '奇幻种'] },
+  {
+    title: '非凡物品',
+    pages: ['辉石', '封印物', '黄金树', '终末之环', '炼金武装', '源质反应核心'],
+    groups: [
+      // 装甲核心：炼金武装中针对帷幕之外的非凡战线特化出的一支
+      { title: '装甲核心', pages: ['装甲核心'] },
+    ],
+  },
+  { title: '非凡物种', pages: ['人类', '龙裔', '奇幻种'] },
   { title: '非凡存在', pages: ['神明', '旧王', '外神', '天灾'] },
   {
     title: '现世诸国',
@@ -397,23 +404,44 @@ const REDIRECTS = {
   'world-cycle': { to: '世界往复.html', target: '世界往复' },
 };
 
+/** 递归收集 content/ 下的 .md（支持「按栏目分子目录」的写法，扁平写法同样适用）
+ *  排除 Office 风格临时锁文件（~$xxx.md）与隐藏文件，否则它们会被当成正文、产出垃圾页面。 */
+function collectMarkdown(dir) {
+  const found = [];
+  const skipped = [];
+  const walk = (cur) => {
+    let entries;
+    try {
+      entries = fs.readdirSync(cur, { withFileTypes: true });
+    } catch {
+      return;
+    }
+    for (const e of entries) {
+      const full = path.join(cur, e.name);
+      if (e.isDirectory()) {
+        if (!e.name.startsWith('.')) walk(full);
+      } else if (e.name.endsWith('.md')) {
+        if (e.name.startsWith('~$') || e.name.startsWith('.')) skipped.push(path.relative(CONTENT_DIR, full));
+        else found.push(full);
+      }
+    }
+  };
+  if (fs.existsSync(dir)) walk(dir);
+  return { found, skipped };
+}
+
 function loadContent() {
-  // 排除 Office 风格的临时锁文件（~$xxx.md）与隐藏文件，
-  // 否则它们会被当成正文，产出一个垃圾页面。
-  const files = fs.existsSync(CONTENT_DIR)
-    ? fs.readdirSync(CONTENT_DIR).filter((f) => f.endsWith('.md') && !f.startsWith('~$') && !f.startsWith('.'))
-    : [];
-  const skipped = fs.existsSync(CONTENT_DIR)
-    ? fs.readdirSync(CONTENT_DIR).filter((f) => f.endsWith('.md') && (f.startsWith('~$') || f.startsWith('.')))
-    : [];
+  const { found, skipped } = collectMarkdown(CONTENT_DIR);
   if (skipped.length) {
     console.warn(`  已跳过 ${skipped.length} 个临时/隐藏文件：${skipped.join('、')}`);
   }
   const pages = new Map();
-  for (const f of files) {
-    const raw = fs.readFileSync(path.join(CONTENT_DIR, f), 'utf8');
+  for (const full of found) {
+    const f = path.relative(CONTENT_DIR, full).split(path.sep).join('/');
+    const raw = fs.readFileSync(full, 'utf8');
     const { meta, body } = parseFrontMatter(raw);
-    const key = f.replace(/\.md$/, '');
+    // 页面 key 取文件名（不含所在子目录），与扁平 content/ 的产物 URL 完全一致
+    const key = path.basename(full).replace(/\.md$/, '');
     pages.set(key, {
       key,
       file: `${key}.html`,
