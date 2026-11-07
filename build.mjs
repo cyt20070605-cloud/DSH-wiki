@@ -351,7 +351,7 @@ const NAV_GROUPS = [
 const REDIRECTS = {
   // 注：「律法熔断」一节已从术士页撤下，故不再带 #锚点（原锚点已不存在）
   'law-meltdown': { to: '术士.html', target: '术士' },
-  'passage': { to: '四层世界.html#区域间通行的方式', target: '四层世界' },
+  'passage': { to: '四层世界.html#区域通行', target: '四层世界' },
   'alchemy-arms': { to: '炼金武装.html#炼金武装', target: '炼金学' },
   'artifact-relic': { to: '封印物.html', target: '封印物' },
   'holy-faralensa': { to: '法拉伦萨.html', target: '法拉伦萨' },
@@ -470,7 +470,7 @@ function buildLinkMap(pages) {
     位阶: '力量体系.html', 源质抗性: '术士.html',
     四界: '力量体系.html', 物质界: '力量体系.html', 形成界: '力量体系.html',
     创造界: '力量体系.html', 原型界: '力量体系.html',
-    通行方式: '四层世界.html#阻止区域间通行的方式', 官方叙事: '帷幕计划.html', 辉石经济: '辉石.html',
+    通行方式: '四层世界.html#区域通行', 官方叙事: '帷幕计划.html', 辉石经济: '辉石.html',
     凝结: '辉石.html', 耐受上限: '术士.html',
     新联邦: '新联邦.html', 神明: '神明.html', 律法: '律法.html',
     // 项目独立页（术语一律指向页面自身）
