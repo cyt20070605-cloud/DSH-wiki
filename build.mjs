@@ -339,7 +339,6 @@ const NAV_GROUPS = [
       { title: '文明古国', pages: ['巴比伦', '底比斯', '旧神州', '罗穆路斯'] },
     ],
   },
-  { title: '重要事件', pages: ['新世工程', '破碎战争', '震怒之日', '千禧陆沉', '帷幕计划'] },
   { title: '历史', pages: ['时间线'] },
   { title: '角色', pages: ['角色卡模板'] },
   { title: '检索', pages: ['术语索引'] },
@@ -349,6 +348,12 @@ const NAV_GROUPS = [
 // 以免旧链接、书签、浏览器缓存的旧侧边栏点到 404。
 // 键 = 已退休的 slug，值 = 落点（可带 #锚点）。
 const REDIRECTS = {
+  // 重大事件五页已并入《时间线》，旧网址静默跳到对应小节
+  '新世工程': { to: '时间线.html#新世工程', target: '时间线' },
+  '破碎战争': { to: '时间线.html#破碎战争与第一次冲击', target: '时间线' },
+  '震怒之日': { to: '时间线.html#震怒之日与第二次冲击', target: '时间线' },
+  '千禧陆沉': { to: '时间线.html#千禧陆沉与第三次冲击', target: '时间线' },
+  '帷幕计划': { to: '时间线.html#帷幕计划', target: '时间线' },
   // 注：「律法熔断」一节已从术士页撤下，故不再带 #锚点（原锚点已不存在）
   'law-meltdown': { to: '术士.html', target: '术士' },
   'passage': { to: '四层世界.html#区域通行', target: '四层世界' },
@@ -371,18 +376,18 @@ const REDIRECTS = {
   'alchemy': { to: '炼金武装.html', target: '炼金武装' },
   'calamity': { to: '天灾.html', target: '天灾' },
   'correction': { to: '深度体系.html', target: '深度体系' },
-  'day-of-wrath': { to: '震怒之日.html', target: '震怒之日' },
+  'day-of-wrath': { to: '时间线.html#震怒之日与第二次冲击', target: '震怒之日' },
   'end-ring': { to: '终末之环.html', target: '终末之环' },
   'essence': { to: '源质.html', target: '源质' },
   'essence-economy': { to: '辉石.html', target: '辉石' },
   'glossary': { to: '术语索引.html', target: '术语索引' },
   'golden-tree': { to: '黄金树.html', target: '黄金树' },
-  'history-official': { to: '帷幕计划.html', target: '帷幕计划' },
+  'history-official': { to: '时间线.html#帷幕计划', target: '帷幕计划' },
   'index': { to: '首页.html', target: '首页' },
   'law': { to: '律法.html', target: '律法' },
-  'millennium-sinking': { to: '千禧陆沉.html', target: '千禧陆沉' },
+  'millennium-sinking': { to: '时间线.html#千禧陆沉与第三次冲击', target: '千禧陆沉' },
   'new-gods': { to: '神明.html', target: '神明' },
-  'new-world-project': { to: '新世工程.html', target: '新世工程' },
+  'new-world-project': { to: '时间线.html#新世工程', target: '新世工程' },
   'old-kings': { to: '旧王.html', target: '旧王' },
   'outer-gods': { to: '外神.html', target: '外神' },
   'power-system': { to: '力量体系.html', target: '力量体系' },
@@ -391,7 +396,7 @@ const REDIRECTS = {
   'race-human': { to: '人类.html', target: '人类' },
   'reactor': { to: '源质反应堆.html', target: '源质反应堆' },
   'sealed-object': { to: '封印物.html', target: '封印物' },
-  'shatter-war': { to: '破碎战争.html', target: '破碎战争' },
+  'shatter-war': { to: '时间线.html#破碎战争与第一次冲击', target: '破碎战争' },
   'sorcerer': { to: '术士.html', target: '术士' },
   'timeline': { to: '时间线.html', target: '时间线' },
   'world': { to: '四层世界.html', target: '四层世界' },
@@ -470,16 +475,16 @@ function buildLinkMap(pages) {
     位阶: '力量体系.html', 源质抗性: '术士.html',
     四界: '力量体系.html', 物质界: '力量体系.html', 形成界: '力量体系.html',
     创造界: '力量体系.html', 原型界: '力量体系.html',
-    通行方式: '四层世界.html#区域通行', 官方叙事: '帷幕计划.html', 辉石经济: '辉石.html',
+    通行方式: '四层世界.html#区域通行', 官方叙事: '时间线.html#帷幕计划', 辉石经济: '辉石.html',
     凝结: '辉石.html', 耐受上限: '术士.html',
     新联邦: '新联邦.html', 神明: '神明.html', 律法: '律法.html',
-    // 项目独立页（术语一律指向页面自身）
-    帷幕计划: '帷幕计划.html', 新世工程: '新世工程.html',
-    新世: '新世工程.html',
-    // 重大事件页
-    破碎战争: '破碎战争.html', 第一次冲击: '破碎战争.html',
-    震怒之日: '震怒之日.html', 第二次冲击: '震怒之日.html',
-    千禧陆沉: '千禧陆沉.html', 第三次冲击: '千禧陆沉.html',
+    // 重大事件已并入时间线，术语一律落到对应锚点
+    帷幕计划: '时间线.html#帷幕计划', 新世工程: '时间线.html#新世工程',
+    新世: '时间线.html#新世工程',
+    // 重大事件（并入时间线后的锚点）
+    破碎战争: '时间线.html#破碎战争与第一次冲击', 第一次冲击: '时间线.html#破碎战争与第一次冲击',
+    震怒之日: '时间线.html#震怒之日与第二次冲击', 第二次冲击: '时间线.html#震怒之日与第二次冲击',
+    千禧陆沉: '时间线.html#千禧陆沉与第三次冲击', 第三次冲击: '时间线.html#千禧陆沉与第三次冲击',
     // 现世诸国页（各页术语一律指向页面自身）
     维多利亚: '维多利亚.html', 法拉伦萨: '法拉伦萨.html',
     欧洲共同体: '欧洲共同体.html', 北方同盟: '北方同盟.html',
