@@ -328,7 +328,7 @@ const NAV_GROUPS = [
   { title: '总览', pages: ['首页'] },
   { title: '世界构成', pages: ['四层世界'] },
   { title: '核心规则', pages: ['源质', '律法', '术士', '世界往复', '力量体系', '深度体系'] },
-  { title: '非凡物品', pages: ['辉石', '封印物', '黄金树', '终末之环', '炼金武装', '装甲核心', '源质反应核心'] },
+  { title: '非凡物品', pages: ['辉石', '封印物', '黄金树', '终末之环', '炼金武装', '装甲核心', '源质反应堆'] },
   { title: '非凡物种', pages: ['人类', '龙裔', '奇幻种'] },
   { title: '非凡存在', pages: ['神明', '旧王', '外神', '天灾'] },
   {
@@ -389,7 +389,7 @@ const REDIRECTS = {
   'race-dragonkin': { to: '龙裔.html', target: '龙裔' },
   'race-fantasy': { to: '奇幻种.html', target: '奇幻种' },
   'race-human': { to: '人类.html', target: '人类' },
-  'reactor': { to: '源质反应核心.html', target: '源质反应核心' },
+  'reactor': { to: '源质反应堆.html', target: '源质反应堆' },
   'sealed-object': { to: '封印物.html', target: '封印物' },
   'shatter-war': { to: '破碎战争.html', target: '破碎战争' },
   'sorcerer': { to: '术士.html', target: '术士' },
