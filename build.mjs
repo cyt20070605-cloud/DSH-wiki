@@ -119,7 +119,11 @@ function renderInline(text, ctx) {
   //   2) 只在「不在任何 <a> 内部」的文本段里插入，避免生成嵌套链接
   //      （正文里手写的链接一律原样保留）。
   if (ctx.autolink !== false && ctx.linkMap && ctx.linked) {
-    for (const [term, file] of ctx.linkMap) {
+    // 长词优先：「新神州」必须先于「神州」，「非法术士」必须先于「术士」。
+    // 否则结果会取决于页面文件的读取顺序，两仓（扁平 / 分目录）会产出不同 HTML。
+    const terms = [...ctx.linkMap.keys()].sort((a, b) => b.length - a.length || (a < b ? -1 : 1));
+    for (const term of terms) {
+      const file = ctx.linkMap.get(term);
       if (term.length < 2) continue;
       if (ctx.selfFile && ctx.selfFile === file) continue;
       if (ctx.linked.has(term)) continue;
@@ -428,6 +432,15 @@ function collectMarkdown(dir) {
     }
   };
   if (fs.existsSync(dir)) walk(dir);
+  // readdirSync 的返回顺序由文件系统决定，扁平 / 分目录两种写法会得到不同顺序；
+  // 按完整路径排序也不行（子目录名会参与比较）。统一按文件名（页面 key）排序，
+  // 保证两仓构建产物逐字节一致（search-index.js 的条目顺序依赖它）。
+  const byName = (p) => path.basename(p).replace(/\.md$/, '');
+  found.sort((a, b) => {
+    const x = byName(a);
+    const y = byName(b);
+    return x < y ? -1 : x > y ? 1 : 0;
+  });
   return { found, skipped };
 }
 
@@ -462,13 +475,16 @@ function loadContent() {
 function buildLinkMap(pages) {
   const map = new Map();
   for (const p of pages.values()) {
+    // 检索页（autolink: false）不参与术语互链：它的 keywords 只是索引别名，
+    // 若参与绑定会把「术士」「源质回路」等正名术语抢到自己头上。
+    if (p.autolink === false) continue;
     for (const kw of p.keywords) if (kw && kw.length >= 2) map.set(kw, p.file);
   }
   // 精确名词优先：代码名【】内的词优先绑定到其所属条目
-  const priority = ['原初律法', '律法', '无上意志', '修正值', '炼金武装', '遗物', '灰潮使徒', '灰潮构造体', '终末之环', '世界引擎', '先锋守望', '帷幕计划', '千年协定', '帝国轴心', '绛天之龙', '铸形之炎', '伏行之恶', '轮回终末', '百相熔炉', '永世集团', '黄金黎明', '世外天国', '辉石', '亚龙', '四界', '位阶', '新世工程', '新世', '破碎战争', '第一次冲击', '震怒之日', '第二次冲击', '千禧陆沉', '第三次冲击', '维多利亚', '法拉伦萨', '欧洲共同体', '北方同盟', '新联邦', '新神州', '苇原', '伊塔利亚', '莱茵联邦', '塞纳共和国', '金色裂痕', '黄金树'];
+  const priority = ['原初律法', '律法', '无上意志', '修正值', '炼金武装', '遗物', '源质回路', '灰潮使徒', '灰潮构造体', '终末之环', '世界引擎', '先锋守望', '帷幕计划', '千年协定', '帝国轴心', '绛天之龙', '铸形之炎', '伏行之恶', '轮回终末', '百相熔炉', '永世集团', '黄金黎明', '世外天国', '辉石', '亚龙', '四界', '位阶', '新世工程', '新世', '破碎战争', '第一次冲击', '震怒之日', '第二次冲击', '千禧陆沉', '第三次冲击', '维多利亚', '法拉伦萨', '欧洲共同体', '北方同盟', '新联邦', '新神州', '苇原', '伊塔利亚', '莱茵联邦', '塞纳共和国', '金色裂痕', '黄金树'];
   const owner = {
     原初律法: '律法.html', 无上意志: '外神.html', 修正值: '深度体系.html', 炼金武装: '炼金武装.html#炼金武装',
-    遗物: '遗物.html', 灰潮使徒: '天灾.html', 灰潮构造体: '天灾.html', 终末之环: '遗物.html', 世界引擎: '时间线.html',
+    遗物: '遗物.html', 源质回路: '术士.html', 灰潮使徒: '天灾.html', 灰潮构造体: '天灾.html', 终末之环: '遗物.html', 世界引擎: '时间线.html',
     先锋守望: '时间线.html', 帷幕计划: '时间线.html', 千年协定: '时间线.html', 帝国轴心: '时间线.html',
     绛天之龙: '外神.html', 铸形之炎: '外神.html', 伏行之恶: '外神.html', 轮回终末: '外神.html',
     百相熔炉: '旧王.html', 永世集团: '旧王.html', 黄金黎明: '旧王.html', 世外天国: '旧王.html',
