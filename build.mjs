@@ -329,7 +329,7 @@ function renderMarkdown(md, file, autolink = true) {
 // 各栏目内条目一律按「标题字数从少到多」排列；字数相同时保持此处的书写顺序。
 // 栏目下的 groups 是子栏目：标题 + 条目，子栏目内同样按字数排。
 const NAV_GROUPS = [
-  { title: '世界总览', pages: ['首页'] },
+  { title: '世界总览', pages: ['世界总览'] },
   { title: '世界构成', pages: ['四层世界'] },
   { title: '核心规则', pages: ['源质', '律法', '术士', '世界往复', '力量体系', '深度体系'] },
   { title: '非凡物品', pages: ['辉石', '遗物', '黄金树', '终末之环', '炼金武装', '装甲核心', '源质反应堆'] },
@@ -389,7 +389,8 @@ const REDIRECTS = {
   'glossary': { to: '术语索引.html', target: '术语索引' },
   'golden-tree': { to: '黄金树.html', target: '黄金树' },
   'history-official': { to: '帷幕计划.html', target: '帷幕计划' },
-  'index': { to: '首页.html', target: '首页' },
+  'index': { to: '世界总览.html', target: '世界总览' },
+  '首页': { to: '世界总览.html', target: '世界总览' },
   'law': { to: '律法.html', target: '律法' },
   'millennium-sinking': { to: '千禧陆沉.html', target: '千禧陆沉' },
   'new-gods': { to: '神明.html', target: '神明' },
@@ -601,7 +602,7 @@ function pageShell({ pages, page, content, toc, prev, next }) {
       .find((s) => s.items.some((p) => p.key === page.key)) || {}).title || '';
 
   const crumbs = [
-    `<a href="首页.html">${escapeHtml(SITE_TITLE)}</a>`,
+    `<a href="世界总览.html">${escapeHtml(SITE_TITLE)}</a>`,
     groupTitle ? `<span class="sep">/</span><span>${escapeHtml(groupTitle)}</span>` : '',
     subTitle ? `<span class="sep">/</span><span>${escapeHtml(subTitle)}</span>` : '',
     page.category && page.category !== groupTitle && page.category !== subTitle
@@ -647,7 +648,7 @@ function pageShell({ pages, page, content, toc, prev, next }) {
 
 <header class="topbar">
   <button class="burger" id="nav-open" type="button" aria-label="打开目录" aria-expanded="false">☰</button>
-  <a class="brand" href="首页.html">
+  <a class="brand" href="世界总览.html">
     <span class="brand-mark" aria-hidden="true">源</span>
     <span class="brand-body">
       <span class="brand-main">${escapeHtml(SITE_TITLE)}</span>
@@ -782,7 +783,7 @@ function build() {
   const totalChars = [...pages.values()].reduce((n, p) => n + p.body.length, 0);
   console.log(`✓ 构建完成：${pages.size} 个页面 → ${path.relative(ROOT, OUT_DIR)}/`);
   console.log(`  正文合计 ${totalChars} 字符，检索索引 ${searchIndex.length} 条`);
-  console.log(`  打开：${path.join(OUT_DIR, '首页.html')}`);
+  console.log(`  打开：${path.join(OUT_DIR, '世界总览.html')}`);
 }
 
 /* ------------------------------------------------------------------- serve */
@@ -798,7 +799,7 @@ function serve(port) {
   };
   const server = http.createServer((req, res) => {
     const urlPath = decodeURIComponent((req.url || '/').split('?')[0]);
-    const rel = urlPath === '/' ? '首页.html' : urlPath.replace(/^\/+/, '');
+    const rel = urlPath === '/' ? '世界总览.html' : urlPath.replace(/^\/+/, '');
     const target = path.join(OUT_DIR, rel);
     if (!target.startsWith(OUT_DIR)) {
       res.writeHead(403).end('forbidden');
