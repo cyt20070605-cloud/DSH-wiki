@@ -329,7 +329,7 @@ function renderMarkdown(md, file, autolink = true) {
 // 各栏目内条目一律按「标题字数从少到多」排列；字数相同时保持此处的书写顺序。
 // 栏目下的 groups 是子栏目：标题 + 条目，子栏目内同样按字数排。
 const NAV_GROUPS = [
-  { title: '总览', pages: ['首页'] },
+  { title: '世界总览', pages: ['首页'] },
   { title: '世界构成', pages: ['四层世界'] },
   { title: '核心规则', pages: ['源质', '律法', '术士', '世界往复', '力量体系', '深度体系'] },
   { title: '非凡物品', pages: ['辉石', '遗物', '黄金树', '终末之环', '炼金武装', '装甲核心', '源质反应堆'] },
