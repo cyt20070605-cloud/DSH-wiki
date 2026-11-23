@@ -147,9 +147,15 @@ autolink: false        # 可选；索引类页面建议设为 false
 
 ## 更新与部署
 
-手动同步到线上托管的最短路径：
+这个目录是**唯一源**。改完 `content/` 里的东西，保存后什么都不用做——后台监听会在 6 秒静默后自动同步到 `C:\Users\cyt\Desktop\DSH-wiki`、构建校验、提交并推送到 GitHub，Pages 随即重新部署。
 
-1. `node build.mjs`
-2. 把 `site/` 里的**全部文件**上传（压缩包内 `index.html` 必须在**根层**）
+- 手动触发一次：双击 **`同步并推送.bat`**
+- 监听没在跑：双击 **`自动同步.bat`**；停掉：**`停止自动同步.bat`**
+- 日志：本目录下 `.autosync.log`（每次同步一行）
+- 本地预览：双击 **`打开wiki.bat`**，浏览器访问 `http://127.0.0.1:8899`
 
-或直接双击 **`手动更新并打包.bat`**，它会重建站点并在 `wiki/` 下生成 `netlify-deploy.zip`。
+线上地址：https://cyt20070605-cloud.github.io/DSH-wiki/
+
+构建失败时不会推送，所以看到日志里出现 `ERROR` 就说明这次改动没上线，先修再存。
+
+旧的 Netlify 打包方式已经废弃（`pack-netlify.mjs`、`netlify-deploy.zip`、`手动更新并打包.bat` 已删除，需要时可从 git 历史里取回）。
